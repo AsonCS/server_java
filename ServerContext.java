@@ -1,10 +1,12 @@
-package javaapplication1;
+package printerserver;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class ServerContext implements Runnable{
@@ -31,6 +33,26 @@ public class ServerContext implements Runnable{
         this.cliente = cliente;
         this.routes = routes;
         hostAddress = cliente.getInetAddress().getHostAddress();
+    }
+
+    @Override
+    public void run(){
+        try{
+            in = cliente.getInputStream();
+            out = cliente.getOutputStream();
+            String request = getRequest(in);
+            splitHeaderBody(request);
+            identifyMethod();
+            identifyUrl();
+            byte[] httpResponse = selectRoute();
+            out.write(httpResponse);
+            in.close();
+            out.flush();
+            out.close();
+            cliente.close();
+        }catch(Exception e){
+            System.err.println("e" + e.getMessage());
+        }
     }
     
     private String getRequest(InputStream reader) throws Exception{
@@ -70,31 +92,16 @@ public class ServerContext implements Runnable{
         url = header.substring(a, b);
     }
     
-    private TreeMap<String, Object> processRoute(String route){
-        TreeMap<String, Object> objects = new TreeMap<>();
+    private TreeMap<String, String> processUrl(String url, String[] keys){
         TreeMap<String, String> params = new TreeMap<>();
-        String response = "";
-        if(route.split("/").length < 1){
-            objects.put("route", response);
-            objects.put("params", params);
-            return objects;
-        }
-        for(String b : route.split("/")){
-            if(!b.contains("{") && !b.contains("}")){
-                response = b.length() > 0 ? response + "/" + b : response + "";
-            }else{
-                response = b.length() > 0 ? response + "/([^/]+)" : response + "";
-                params.put(b.substring(b.indexOf("{") + 1, b.indexOf("}")), "");
+        String[] a = url.split("[?]"), c = a[0].split("/");
+        if(c.length == keys.length){
+            for(int i = 1; i < c.length; i++){
+                if(!keys[i].equals("?")){
+                    params.put(keys[i], c[i]);
+                }
             }
         }
-        //System.out.println(url.matches(this.route));
-        objects.put("route", response);
-        objects.put("params", params);
-        return objects;
-    }
-    
-    private TreeMap<String, String> processUrl(String url, TreeMap<String, String> params){
-        if(params == null) params = new TreeMap<>();
         if(url.split("[?]").length > 1){
             for(String b : url.split("[?]")[1].split("&")){
                 if(b.split("=").length > 1) params.put(b.split("=")[0], b.split("=")[1]);
@@ -103,37 +110,19 @@ public class ServerContext implements Runnable{
         }
         return params;
     }
-
-    @Override
-    public void run(){
-        try{
-            System.out.println("-------------------------------------------------");
-            System.out.println("Cliente conectado: " + hostAddress); 
-            in = cliente.getInputStream();
-            out = cliente.getOutputStream();
-            String request = getRequest(in);
-            splitHeaderBody(request);
-            identifyMethod();
-            identifyUrl();
-            byte[] httpResponse = new byte[0];
-            if(routes.size() > 0){
-                routes.get(0).setParams(processUrl(url, routes.get(0).getParams()));
-                System.out.println(header);
-                System.out.println(routes.get(0).getParams());
-                
-                httpResponse = routes.get(0).getHandler()
-                        .handler(new Request(body, method, routes.get(0).getParams()), new Response("test2"))
+    
+    private byte[] selectRoute() throws UnsupportedEncodingException{        
+        for(Route route : routes){
+            if(url.split("[?]")[0].matches(route.getRoute()) && false){
+                System.out.println("Cliente conectado: " + hostAddress);
+                route.setParams(processUrl(url, route.getKeys()));
+                System.out.println(route.getParams());
+                return route.getHandler()
+                        .handler(new Request(body, method, route.getParams()), new Response("test2"))
                         .getBytes();
             }
-            if(httpResponse.length < 1) httpResponse = "HTTP/1.1 505 OK\r\n\r\n".getBytes("UTF-8");
-            out.write(httpResponse);
-            out.flush();
-            in.close();
-            out.close();
-            cliente.close();
-        }catch(Exception e){
-            System.err.println(e.getMessage());
         }
+        return "HTTP/1.1 404 OK\r\n\r\n".getBytes("UTF-8");
     }
     
 }

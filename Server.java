@@ -1,4 +1,4 @@
-package javaapplication1;
+package printerserver;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,9 +17,10 @@ public class Server {
     
     private String[] processRoute(String route){
         String[] response = new String[2];
+        response[0] = "";
+        response[1] = "";
+        route = route.split("[?]")[0];
         if(route.split("/").length < 1){
-        	response[0] = "";
-            response[1] = "";
             return response;
         }
         for(String b : route.split("/")){
@@ -36,7 +37,7 @@ public class Server {
     
     public Server addRoute(String route, Handler handler, Parameter ...parameters){
         String[] map = processRoute(route);
-        routes.add(new Route(map[0], map[1], handler, parameters));
+        routes.add(new Route(map[0], map[1].split("/"), handler, parameters));
         return this;
     }
     
@@ -52,31 +53,7 @@ public class Server {
             while (true) {
                 try{
                     Socket cliente = servidor.accept();
-                    cliente.setSoTimeout(10000);                
-                    Thread t = new Thread(new ServerContext(cliente, routes));
-                    t.start();
-                } catch (Exception ex) {
-                    System.err.println(ex.getMessage());
-                }
-            }
-        }
-    }
-    
-}
-    
-    public Server removeRoute(int idx){
-        if(idx > -1 && idx < routes.size()) routes.remove(idx);
-        return this;
-    }
-    
-    public void start() throws Exception{
-        if(routes.size() > 0){
-            ServerSocket servidor = new ServerSocket(8080);
-            System.out.println("Servidor ouvindo a porta 8080");
-            while (true) {
-                try{
-                    Socket cliente = servidor.accept();
-                    cliente.setSoTimeout(10000);                
+                    cliente.setSoTimeout(10000);
                     Thread t = new Thread(new ServerContext(cliente, routes));
                     t.start();
                 } catch (Exception ex) {

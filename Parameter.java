@@ -1,4 +1,4 @@
-package javaapplication1;
+package printerserver;
 
 public enum Parameter {
     GET,
