@@ -62,6 +62,13 @@ public class Route {
         return this;
     }
     
+    public boolean inParameters(Parameter parameter){
+        for(Parameter p : parameters){
+            if(p.equals(parameter)) return true;
+        }
+        return false;
+    }
+    
     @Override
     public String toString() {
         return "route: "+route+"\nparams: "+params;

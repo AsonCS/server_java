@@ -3,6 +3,7 @@ package printerserver;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,8 +15,8 @@ public class ServerContext implements Runnable{
     private static final String GET = "GET";
     private static final String POST = "POST";
     
-    private InputStream in;
-    private OutputStream out;
+    //private InputStream in;
+    //private OutputStream out;
     
     private Handler handler;
     private Parameter[] parameters;
@@ -38,20 +39,22 @@ public class ServerContext implements Runnable{
     @Override
     public void run(){
         try{
-            in = cliente.getInputStream();
-            out = cliente.getOutputStream();
-            String request = getRequest(in);
+            String request = "";
+            do{
+                request += (char) cliente.getInputStream().read();
+            }while(cliente.getInputStream().available()>0);
             splitHeaderBody(request);
             identifyMethod();
             identifyUrl();
             byte[] httpResponse = selectRoute();
-            out.write(httpResponse);
-            in.close();
-            out.flush();
-            out.close();
-            cliente.close();
+            cliente.getOutputStream().write(httpResponse);
+            cliente.getOutputStream().flush();
         }catch(Exception e){
-            System.err.println("e" + e.getMessage());
+            //System.err.println(e.getMessage());
+        }finally{
+            try{
+                cliente.close();
+            }catch (Exception e){}
         }
     }
     
@@ -111,18 +114,34 @@ public class ServerContext implements Runnable{
         return params;
     }
     
-    private byte[] selectRoute() throws UnsupportedEncodingException{        
+    private byte[] selectRoute() throws UnsupportedEncodingException{
+        //System.out.println(url);
         for(Route route : routes){
-            if(url.split("[?]")[0].matches(route.getRoute()) && false){
+            if(url.split("[?]")[0].matches(route.getRoute())){
+                switch(method){
+                    case GET:
+                        if(!route.inParameters(Parameter.GET)) continue;
+                        break;
+                    case POST:
+                        if(!route.inParameters(Parameter.POST)) continue;
+                        break;
+                    default:
+                        continue;
+                }
                 System.out.println("Cliente conectado: " + hostAddress);
                 route.setParams(processUrl(url, route.getKeys()));
-                System.out.println(route.getParams());
                 return route.getHandler()
-                        .handler(new Request(body, method, route.getParams()), new Response("test2"))
+                        .handler(new Request(body, method, route.getParams()), new Response())
                         .getBytes();
             }
         }
-        return "HTTP/1.1 404 OK\r\n\r\n".getBytes("UTF-8");
+        String headerResponse = "HTTP/1.1 404 NOT FOUND\r\n"
+                + "Server: Anderson : 1.0\r\n"
+                + "Date: " + new Date().toString() + "\r\n"
+                + "Content-length: 0\r\n"
+                + "Content-type: text/html;charset=UTF-8\r\n"
+                + "\r\n";
+        return headerResponse.getBytes("UTF-8");
     }
     
 }

@@ -53,7 +53,7 @@ public class Server {
             while (true) {
                 try{
                     Socket cliente = servidor.accept();
-                    cliente.setSoTimeout(10000);
+                    cliente.setSoTimeout(1000);
                     Thread t = new Thread(new ServerContext(cliente, routes));
                     t.start();
                 } catch (Exception ex) {

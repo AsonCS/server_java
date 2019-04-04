@@ -1,31 +1,55 @@
 package printerserver;
 
+import java.lang.reflect.Array;
+
 public class PrinterServer {
     public static void main(String[] args){
         try {
             new Server()
-                .addRoute("/test/{name}/{id}/vai", handler, Parameter.GET, Parameter.TEXT_ZPL)
-                .addRoute("/test/{name}", handler, Parameter.GET, Parameter.TEXT_ZPL)
-                .addRoute("/test", handler1, Parameter.GET, Parameter.TEXT_ZPL)
+                .addRoute("/test/{name}/{id}/vai", handler, Parameter.GET)
+                .addRoute("/test/{name}", handler, Parameter.GET)
+                .addRoute("/test", handler1, Parameter.GET)
+                .addRoute("/printers", printersName, Parameter.GET)
+                .addRoute("/printer/{name}", print, Parameter.GET)
                 .start();
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
         }
     }
     
+    private static Handler printersName = (request, response) -> {
+        String a = "<html><table>";
+        for(String b : Printer.getPrinters()){
+            a += "<tr><td>" + b + "</td></tr>";
+        }
+        a += "</table></html>";
+        //System.out.println(a);
+        response.putBody(a);
+        return response;
+    };
+    
+    private static Handler print = (request, response) -> {
+        Printer printer = new Printer(request.getParams().get("name"), PrinterServer.zpl);
+        response.putBody("<pre>" + PrinterServer.zpl);
+        try{
+            printer.print();
+        }catch(Exception e){
+            System.err.println(e.getMessage());
+        }
+        return response;
+    };
+    
     private static Handler handler = (request, response) -> {
         response.setBody("<h1 style=\"color: red\">Olá mundo!!</h1>");
-        //System.out.println("getParams: " + request.getParams());
         return response;
     };
     
     private static Handler handler1 = (request, response) -> {
-        response.setBody(PrinterServer.zpl);
-        //System.out.println("getParams: " + request.getParams());
+        response.setBody("<pre>" + PrinterServer.zpl);
         return response;
     };
     
-    static String zpl = "<pre>^XA\n" +
+    static String zpl = "^XA\n" +
                         "^MCY\n" +
                         "^XZ\n" +
                         "^XA\n" +

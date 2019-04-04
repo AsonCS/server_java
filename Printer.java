@@ -1,5 +1,9 @@
-package javaapplication1;
+package printerserver;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.print.Doc;
 import javax.print.DocFlavor;
 import javax.print.DocPrintJob;
@@ -9,12 +13,20 @@ import javax.print.PrintServiceLookup;
 import javax.print.SimpleDoc;
 
 public class Printer {
+    private static final String CODE_BACKSLASH = "%29";   // Para barra invertida
+    private static final String CODE_SLASH = "%28";       // Para barra
+    private static final String CODE_BLANK_SPACE = "%20";   // Para espaço em branco
+    private static final String REG_BACKSLASH = "[\\\\]";
+    private static final String REG_SLASH = "[/]";
+    private static final String BACKSLASH = "\\\\";
+    private static final String SLASH = "/";
+    private static final String BLANK_SPACE = " ";
     
     private String printerName;
     private String zplCode;
 
     public Printer(String printerName, String zplCode) {
-        this.printerName = printerName;
+        this.printerName = decodeName(printerName);
         this.zplCode = zplCode;
     }
 
@@ -36,13 +48,27 @@ public class Printer {
         return this;
     }
     
-    public String[] getPrinters(){
+    public static String[] getPrinters(){
         PrintService[] printers = PrintServiceLookup.lookupPrintServices(null, null);
         String[] response = new String[printers.length];
         for(int i = 0; i < printers.length; i++){
-            response[i] = printers[i].getName();
+            response[i] = encodeName(printers[i].getName());
         }
         return response;
+    }
+    
+    public static String decodeName(String name){
+        name = name.replaceAll(CODE_BACKSLASH, BACKSLASH);
+        name = name.replaceAll(CODE_SLASH, SLASH);
+        name = name.replaceAll(CODE_BLANK_SPACE, BLANK_SPACE);
+        return name;
+    }
+    
+    public static String encodeName(String name){
+        name = name.replaceAll(REG_BACKSLASH, CODE_BACKSLASH);
+        name = name.replaceAll(REG_SLASH, CODE_SLASH);
+        name = name.replaceAll(BLANK_SPACE, CODE_BLANK_SPACE);
+        return name;
     }
     
     public void print() throws Exception, PrintException{
@@ -52,7 +78,7 @@ public class Printer {
         
         PrintService printer = null;
         for(PrintService ps : PrintServiceLookup.lookupPrintServices(null, null)){
-            if (ps.getName().toLowerCase().indexOf(printerName.toLowerCase()) >= 0) { 
+            if (ps.getName().toLowerCase().contains(printerName.toLowerCase())) { 
                 printer = ps; 
                 break; 
             } 
@@ -63,11 +89,14 @@ public class Printer {
         DocPrintJob job = printer.createPrintJob();
         DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE; 
         Doc doc = new SimpleDoc(zplCode.getBytes(), flavor, null); 
-        try {
-            job.print(doc, null);
-        } catch (PrintException ex) {
-            throw ex;
-        }
+        FileWriter file = null;
+        String name = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+        File f = new File("C:/Users/adm/Documents/etiquetas/" + name + ".txt");
+        if(!f.exists()) f.createNewFile();
+        file = new FileWriter(f, true);
+        file.write(zplCode);
+        file.close();
+        //job.print(doc, null);
     }
 
     @Override
