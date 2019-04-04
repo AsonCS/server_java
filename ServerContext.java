@@ -39,10 +39,7 @@ public class ServerContext implements Runnable{
     @Override
     public void run(){
         try{
-            String request = "";
-            do{
-                request += (char) cliente.getInputStream().read();
-            }while(cliente.getInputStream().available()>0);
+            String request = getRequest(cliente.getInputStream());
             splitHeaderBody(request);
             identifyMethod();
             identifyUrl();
