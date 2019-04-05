@@ -1,34 +1,26 @@
-package printerserver;
+package printerserver.server;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
 import java.util.TreeMap;
+import printerserver.server.Parameter.*;
 
 public class ServerContext implements Runnable{
-    
-    private static final String GET = "GET";
-    private static final String POST = "POST";
-    
-    //private InputStream in;
-    //private OutputStream out;
     
     private Handler handler;
     private Parameter[] parameters;
     private String header;
     private String body;
-    private String method;
+    private Method method;
     private String url;
-    private String hostAddress;
+    private final String hostAddress;
     
-    private ArrayList<Route> routes;
+    private final ArrayList<Route> routes;
     
-    private Socket cliente;
+    private final Socket cliente;
 
     public ServerContext(Socket cliente, ArrayList<Route> routes){
         this.cliente = cliente;
@@ -78,9 +70,9 @@ public class ServerContext implements Runnable{
     }
     
     private void identifyMethod(){
-        method = GET;
-        if(header.substring(0, 10).contains(POST)) 
-            method = POST;
+        method = Method.GET;
+        if(header.substring(0, 10).contains(Parameter.POST)) 
+            method = Method.POST;
     }
     
     private void identifyUrl(){
@@ -114,17 +106,7 @@ public class ServerContext implements Runnable{
     private byte[] selectRoute() throws UnsupportedEncodingException{
         //System.out.println(url);
         for(Route route : routes){
-            if(url.split("[?]")[0].matches(route.getRoute())){
-                switch(method){
-                    case GET:
-                        if(!route.inParameters(Parameter.GET)) continue;
-                        break;
-                    case POST:
-                        if(!route.inParameters(Parameter.POST)) continue;
-                        break;
-                    default:
-                        continue;
-                }
+            if(url.split("[?]")[0].matches(route.getRoute()) && route.getMethod().equals(method)){
                 System.out.println("Cliente conectado: " + hostAddress);
                 route.setParams(processUrl(url, route.getKeys()));
                 return route.getHandler()
@@ -134,11 +116,8 @@ public class ServerContext implements Runnable{
         }
         String headerResponse = "HTTP/1.1 404 NOT FOUND\r\n"
                 + "Server: Anderson : 1.0\r\n"
-                + "Date: " + new Date().toString() + "\r\n"
-                + "Content-length: 0\r\n"
-                + "Content-type: text/html;charset=UTF-8\r\n"
-                + "\r\n";
-        return headerResponse.getBytes("UTF-8");
+                + "Date: " + new Date().toString() + "\r\n\r\n";
+        return headerResponse.getBytes(Parameter.getEncoding(Encoding.UTF_8));
     }
     
 }

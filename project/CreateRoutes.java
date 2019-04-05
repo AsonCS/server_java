@@ -1,23 +1,23 @@
 package printerserver;
 
-import java.lang.reflect.Array;
+import printerserver.server.Handler;
+import printerserver.server.Parameter.*;
+import printerserver.server.Server;
+import printerserver.server.Printer;
 
-public class PrinterServer {
-    public static void main(String[] args){
-        try {
-            new Server()
-                .addRoute("/test/{name}/{id}/vai", handler, Parameter.GET)
-                .addRoute("/test/{name}", handler, Parameter.GET)
-                .addRoute("/test", handler1, Parameter.GET)
-                .addRoute("/printers", printersName, Parameter.GET)
-                .addRoute("/printer/{name}", print, Parameter.GET)
-                .start();
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-        }
+public class CreateRoutes {
+    
+    public Server getServer(){
+        return new Server()
+                .addRoute("/printers", Method.GET, printers)
+                .addRoute("/test/{name}/{id}/vai", Method.GET, handler)
+                .addRoute("/test/{name}", Method.GET, handler)
+                .addRoute("/test", Method.GET, handler1)
+                .addRoute("/printer/{name}", Method.GET, print)
+        ;
     }
     
-    private static Handler printersName = (request, response) -> {
+    private Handler printers = (request, response) -> {
         String a = "<html><table>";
         for(String b : Printer.getPrinters()){
             a += "<tr><td>" + b + "</td></tr>";
@@ -25,31 +25,32 @@ public class PrinterServer {
         a += "</table></html>";
         //System.out.println(a);
         response.putBody(a);
-        return response;
+        return response.setContentType(ContentType.TEXT_HTML);
     };
     
-    private static Handler print = (request, response) -> {
-        Printer printer = new Printer(request.getParams().get("name"), PrinterServer.zpl);
-        response.putBody("<pre>" + PrinterServer.zpl);
+    private Handler print = (request, response) -> {
+        Printer printer = new Printer(request.getParams().get("name"), zpl);
         try{
             printer.print();
+            response.putBody(zpl).setContentType(ContentType.TEXT_ZPL);
         }catch(Exception e){
-            System.err.println(e.getMessage());
+            response.setStatus(Status.NOT_FOUND);
+            //System.err.println(e.getMessage());
         }
         return response;
     };
     
-    private static Handler handler = (request, response) -> {
+    private Handler handler = (request, response) -> {
         response.setBody("<h1 style=\"color: red\">Olá mundo!!</h1>");
+        return response.setContentType(ContentType.TEXT_HTML);
+    };
+    
+    private Handler handler1 = (request, response) -> {
+        response.setBody(zpl).setContentType(ContentType.TEXT_ZPL);
         return response;
     };
     
-    private static Handler handler1 = (request, response) -> {
-        response.setBody("<pre>" + PrinterServer.zpl);
-        return response;
-    };
-    
-    static String zpl = "^XA\n" +
+    public static String zpl = "^XA\n" +
                         "^MCY\n" +
                         "^XZ\n" +
                         "^XA\n" +
@@ -69,4 +70,5 @@ public class PrinterServer {
                         "^ADN,18,10^FO334,425^FDAUTOLOG WMS^FS\n" +
                         "^PQ,0,1,Y\n" +
                         "^XZ";
+    
 }

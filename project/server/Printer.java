@@ -1,4 +1,4 @@
-package printerserver;
+package printerserver.server;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,14 +13,14 @@ import javax.print.PrintServiceLookup;
 import javax.print.SimpleDoc;
 
 public class Printer {
-    private static final String CODE_BACKSLASH = "%29";   // Para barra invertida
-    private static final String CODE_SLASH = "%28";       // Para barra
+    private static final String CODE_BACKSLASH = "%5C";   // Para barra invertida
+    private static final String CODE_SLASH = "%2F";       // Para barra
     private static final String CODE_BLANK_SPACE = "%20";   // Para espaço em branco
-    private static final String REG_BACKSLASH = "[\\\\]";
-    private static final String REG_SLASH = "[/]";
     private static final String BACKSLASH = "\\\\";
     private static final String SLASH = "/";
     private static final String BLANK_SPACE = " ";
+    private static final String REG_BACKSLASH = "[\\\\]";
+    private static final String REG_SLASH = "[/]";
     
     private String printerName;
     private String zplCode;
@@ -88,15 +88,20 @@ public class Printer {
         
         DocPrintJob job = printer.createPrintJob();
         DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE; 
-        Doc doc = new SimpleDoc(zplCode.getBytes(), flavor, null); 
-        FileWriter file = null;
-        String name = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
-        File f = new File("C:/Users/adm/Documents/etiquetas/" + name + ".txt");
-        if(!f.exists()) f.createNewFile();
-        file = new FileWriter(f, true);
-        file.write(zplCode);
-        file.close();
+        Doc doc = new SimpleDoc(zplCode.getBytes(), flavor, null);
+        createFile();
         //job.print(doc, null);
+    }
+    
+    private void createFile(){
+        try{
+            String name = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+            File file = new File("etiquetas/" + name + ".txt");
+            if(!file.exists()) file.createNewFile();
+            FileWriter writer = new FileWriter(file, true);
+            writer.write(zplCode);
+            writer.close();
+        }catch (Exception e){}
     }
 
     @Override

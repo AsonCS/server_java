@@ -1,11 +1,10 @@
-package printerserver;
+package printerserver.server;
 
+import java.io.File;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import printerserver.server.Parameter.*;
 
 public class Server {
     
@@ -35,9 +34,9 @@ public class Server {
         return response;
     }
     
-    public Server addRoute(String route, Handler handler, Parameter ...parameters){
+    public Server addRoute(String route, Method method, Handler handler){
         String[] map = processRoute(route);
-        routes.add(new Route(map[0], map[1].split("/"), handler, parameters));
+        routes.add(new Route(map[0], map[1].split("/"), handler, method));
         return this;
     }
     
@@ -50,6 +49,9 @@ public class Server {
         if(routes.size() > 0){
             ServerSocket servidor = new ServerSocket(8080);
             System.out.println("Servidor ouvindo a porta 8080");
+            new File("etiquetas").mkdirs();
+            new File("static").mkdirs();
+            new File("template").mkdirs();
             while (true) {
                 try{
                     Socket cliente = servidor.accept();
@@ -57,7 +59,7 @@ public class Server {
                     Thread t = new Thread(new ServerContext(cliente, routes));
                     t.start();
                 } catch (Exception ex) {
-                    System.err.println(ex.getMessage());
+                    //System.err.println(ex.getMessage());
                 }
             }
         }

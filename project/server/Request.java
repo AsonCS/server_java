@@ -1,6 +1,7 @@
-package printerserver;
+package printerserver.server;
 
 import java.util.TreeMap;
+import printerserver.server.Parameter.*;
 
 /**
  *
@@ -9,10 +10,10 @@ import java.util.TreeMap;
 public class Request {
     
     private String body;
-    private String method;
+    private Method method;
     private TreeMap<String, String> params;
 
-    public Request(String body, String method, TreeMap<String, String> params) {
+    public Request(String body, Method method, TreeMap<String, String> params) {
         this.body = body;
         this.method = method;
         this.params = params;
@@ -22,24 +23,27 @@ public class Request {
         return body;
     }
 
-    public void setBody(String body) {
+    public Request setBody(String body) {
         this.body = body;
+        return this;
     }
 
-    public String getMethod() {
+    public Method getMethod() {
         return method;
     }
 
-    public void setMethod(String method) {
+    public Request setMethod(Method method) {
         this.method = method;
+        return this;
     }
 
     public TreeMap<String, String> getParams() {
         return params;
     }
 
-    public void setParams(TreeMap<String, String> params) {
+    public Request setParams(TreeMap<String, String> params) {
         this.params = params;
+        return this;
     }
     
     

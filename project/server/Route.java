@@ -1,20 +1,21 @@
-package printerserver;
+package printerserver.server;
 
 import java.util.TreeMap;
+import printerserver.server.Parameter.*;
 
 public class Route {
     
     private String route;
     private String[] keys;
     private Handler handler;
-    private Parameter[] parameters;
+    private Method method;
     private TreeMap<String, String> params;
 
-    public Route(String route, String[] keys, Handler handler, Parameter[] parameters) {
+    public Route(String route, String[] keys, Handler handler, Method method) {
         this.keys = keys;
         this.route = route;
         this.handler = handler;
-        this.parameters = parameters;
+        this.method = method;
     }
 
     public String[] getKeys() {
@@ -44,15 +45,15 @@ public class Route {
         return this;
     }
 
-    public Parameter[] getParameters() {
-        return parameters;
+    public Method getMethod() {
+        return method;
     }
 
-    public Route setParameters(Parameter[] parameters) {
-        this.parameters = parameters;
+    public Route setMethod(Method method) {
+        this.method = method;
         return this;
     }
-
+    
     public TreeMap<String, String> getParams() {
         return params;
     }
@@ -60,13 +61,6 @@ public class Route {
     public Route setParams(TreeMap<String, String> params) {
         this.params = params;
         return this;
-    }
-    
-    public boolean inParameters(Parameter parameter){
-        for(Parameter p : parameters){
-            if(p.equals(parameter)) return true;
-        }
-        return false;
     }
     
     @Override
