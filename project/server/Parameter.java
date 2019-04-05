@@ -13,7 +13,8 @@ public class Parameter {
     public enum ContentType{
         TEXT_HTML,
         TEXT_PLAIN,
-        TEXT_ZPL
+        TEXT_ZPL,
+        APPLICATION_JSON
     }
     
     public enum Encoding{
@@ -40,10 +41,26 @@ public class Parameter {
             case TEXT_HTML:
                 return "text/html";                
             case TEXT_ZPL:
-                return "text/zpl";
+                return "text/zpl";                
+            case APPLICATION_JSON:
+                return "application/json";
             case TEXT_PLAIN:
             default:
                 return "text/plain";
+        }
+    }
+    
+    public static ContentType indentifyContentType(String type){
+        switch(type){
+            case "text/html":
+                return ContentType.TEXT_HTML;                
+            case "text/zpl":
+                return ContentType.TEXT_ZPL;                
+            case "application/json":
+                return ContentType.APPLICATION_JSON;
+            case "text/plain":
+            default:
+                return ContentType.TEXT_PLAIN;
         }
     }
     

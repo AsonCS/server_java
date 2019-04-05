@@ -8,6 +8,10 @@ import printerserver.server.Parameter.*;
 
 public class Server {
     
+    public static final int PORT = 9101;
+    public static final String PATHDIRETORY = "../etiquetas";
+    public static final String PATHLABELS = "../etiquetas/";
+    
     private ArrayList<Route> routes;
 
     public Server() {
@@ -49,9 +53,9 @@ public class Server {
         if(routes.size() > 0){
             ServerSocket servidor = new ServerSocket(8080);
             System.out.println("Servidor ouvindo a porta 8080");
-            new File("etiquetas").mkdirs();
-            new File("static").mkdirs();
-            new File("template").mkdirs();
+            new File(PATHDIRETORY).mkdirs();
+            //new File("static").mkdirs();
+            //new File("template").mkdirs();
             while (true) {
                 try{
                     Socket cliente = servidor.accept();
@@ -59,7 +63,7 @@ public class Server {
                     Thread t = new Thread(new ServerContext(cliente, routes));
                     t.start();
                 } catch (Exception ex) {
-                    //System.err.println(ex.getMessage());
+                    System.err.println(ex.getMessage());
                 }
             }
         }

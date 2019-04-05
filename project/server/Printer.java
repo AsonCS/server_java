@@ -90,13 +90,13 @@ public class Printer {
         DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE; 
         Doc doc = new SimpleDoc(zplCode.getBytes(), flavor, null);
         createFile();
-        //job.print(doc, null);
+        job.print(doc, null);
     }
     
     private void createFile(){
         try{
             String name = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
-            File file = new File("etiquetas/" + name + ".txt");
+            File file = new File(Server.PATHLABELS + name + ".txt");
             if(!file.exists()) file.createNewFile();
             FileWriter writer = new FileWriter(file, true);
             writer.write(zplCode);

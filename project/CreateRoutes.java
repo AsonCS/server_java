@@ -1,6 +1,9 @@
 package printerserver;
 
+import jdk.nashorn.api.scripting.AbstractJSObject;
+import jdk.nashorn.api.scripting.JSObject;
 import printerserver.server.Handler;
+import printerserver.server.Parameter;
 import printerserver.server.Parameter.*;
 import printerserver.server.Server;
 import printerserver.server.Printer;
@@ -9,26 +12,31 @@ public class CreateRoutes {
     
     public Server getServer(){
         return new Server()
-                .addRoute("/printers", Method.GET, printers)
+                .addRoute("/printers", Method.GET, printersGet)
+                .addRoute("/printers", Method.POST, printersPost)
                 .addRoute("/test/{name}/{id}/vai", Method.GET, handler)
                 .addRoute("/test/{name}", Method.GET, handler)
                 .addRoute("/test", Method.GET, handler1)
-                .addRoute("/printer/{name}", Method.GET, print)
+                .addRoute("/printer/{name}", Method.GET, printGet)
+                .addRoute("/printer/{name}", Method.POST, printPost)
         ;
     }
     
-    private Handler printers = (request, response) -> {
-        String a = "<html><table>";
-        for(String b : Printer.getPrinters()){
-            a += "<tr><td>" + b + "</td></tr>";
+    private Handler printPost = (request, response) -> {
+        if(request.getContentType() != ContentType.TEXT_ZPL){
+            return response.setStatus(Status.NOT_FOUND);
         }
-        a += "</table></html>";
-        //System.out.println(a);
-        response.putBody(a);
-        return response.setContentType(ContentType.TEXT_HTML);
+        Printer printer = new Printer(request.getParams().get("name"), request.getBody());
+        try{
+            printer.print();
+        }catch(Exception e){
+            System.err.println(e.getMessage());
+            return response.setStatus(Status.NOT_FOUND);
+        }
+        return response.setBody(request.getBody()).setContentType(ContentType.TEXT_ZPL);
     };
     
-    private Handler print = (request, response) -> {
+    private Handler printGet = (request, response) -> {
         Printer printer = new Printer(request.getParams().get("name"), zpl);
         try{
             printer.print();
@@ -38,6 +46,26 @@ public class CreateRoutes {
             //System.err.println(e.getMessage());
         }
         return response;
+    };
+    
+    private Handler printersPost = (request, response) -> {
+        String a = "{\"printers\": [";
+        for(String b : Printer.getPrinters()){
+            a += "\"" + b + "\",";
+        }
+        a = a.substring(0, a.length() - 1) + "]}";
+        return response.setBody(a).setContentType(ContentType.APPLICATION_JSON);
+    };
+    
+    private Handler printersGet = (request, response) -> {
+        String a = "<html><table>";
+        for(String b : Printer.getPrinters()){
+            a += "<tr><td>" + b + "</td></tr>";
+        }
+        a += "</table></html>";
+        //System.out.println(a);
+        response.putBody(a);
+        return response.setContentType(ContentType.TEXT_HTML);
     };
     
     private Handler handler = (request, response) -> {

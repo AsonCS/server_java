@@ -39,7 +39,7 @@ public class ServerContext implements Runnable{
             cliente.getOutputStream().write(httpResponse);
             cliente.getOutputStream().flush();
         }catch(Exception e){
-            //System.err.println(e.getMessage());
+            System.err.println(e.getMessage());
         }finally{
             try{
                 cliente.close();
@@ -64,7 +64,7 @@ public class ServerContext implements Runnable{
                 header += b + "\n";
                 if(b.length() == 0) a = !a;
             }else{
-                body += b;
+                body += b + "\r\n";
             }
         }
     }
@@ -110,7 +110,7 @@ public class ServerContext implements Runnable{
                 System.out.println("Cliente conectado: " + hostAddress);
                 route.setParams(processUrl(url, route.getKeys()));
                 return route.getHandler()
-                        .handler(new Request(body, method, route.getParams()), new Response())
+                        .handler(new Request(header, body, method, route.getParams()), new Response())
                         .getBytes();
             }
         }
