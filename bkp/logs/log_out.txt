@@ -1,0 +1,63 @@
+Deseja finalizar o arquivo em lotes (S/N)? 
+Deseja finalizar o arquivo em lotes (S/N)? 
+Servidor ouvindo a porta 8080
+Cliente conectado: 0:0:0:0:0:0:0:1
+Cliente conectado: 0:0:0:0:0:0:0:1
+Cliente conectado: 0:0:0:0:0:0:0:1
+Cliente conectado: 0:0:0:0:0:0:0:1
+Cliente conectado: 0:0:0:0:0:0:0:1
+Cliente conectado: 0:0:0:0:0:0:0:1
+Cliente conectado: 0:0:0:0:0:0:0:1
+Cliente conectado: 0:0:0:0:0:0:0:1
+Cliente conectado: 0:0:0:0:0:0:0:1
+Cliente conectado: 0:0:0:0:0:0:0:1
+Cliente conectado: 0:0:0:0:0:0:0:1
+Cliente conectado: 0:0:0:0:0:0:0:1
+Cliente conectado: 0:0:0:0:0:0:0:1
+Deseja finalizar o arquivo em lotes (S/N)? 
+Servidor ouvindo a porta 8080
+Cliente conectado: 0:0:0:0:0:0:0:1
+Deseja finalizar o arquivo em lotes (S/N)? 
+Servidor ouvindo a porta 8080
+Deseja finalizar o arquivo em lotes (S/N)? 
+Servidor ouvindo a porta 8080
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.11
+Deseja finalizar o arquivo em lotes (S/N)? 
+Servidor ouvindo a porta 8080
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Deseja finalizar o arquivo em lotes (S/N)? 
+Servidor ouvindo a porta 8080
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Deseja finalizar o arquivo em lotes (S/N)? 
+Servidor ouvindo a porta 8080
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.12
+Cliente conectado: 192.168.15.11
+Deseja finalizar o arquivo em lotes (S/N)? 
+Servidor ouvindo a porta 8080
+Cliente conectado: 192.168.15.12
+Deseja finalizar o arquivo em lotes (S/N)? 
