@@ -59,6 +59,10 @@ public class Response {
         return this;
     }
     
+    public Response readTemplate(String file){
+        
+        return this;
+    }
     
     
     public byte[] getBytes() throws UnsupportedEncodingException{

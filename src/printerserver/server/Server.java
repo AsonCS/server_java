@@ -12,8 +12,10 @@ import printerserver.server.Parameter.*;
 public class Server {
     
     public static final int PORT = 9101;
-    public static final String PATHDIRETORY = "etiquetas";
-    public static final String PATHLABELS = PATHDIRETORY + "/";
+    public static final String DIRLABELS = "etiquetas";
+    public static final String DIRTEMPLATES = "templates";
+    public static final String DIRSTATICS = "statics";
+    public static final String PATHLABELS = DIRLABELS + "/";
     
     private ArrayList<Route> routes;
     private boolean runStatus = false;
@@ -62,9 +64,9 @@ public class Server {
             servidor = new ServerSocket(PORT);
         }
         if(routes.size() > 0){
-            new File(PATHDIRETORY).mkdirs();
+            new File(DIRLABELS).mkdirs();
             //new File("static").mkdirs();
-            //new File("template").mkdirs();
+            new File(DIRTEMPLATES).mkdirs();
             new Thread(){
                 @Override
                 public void run() {

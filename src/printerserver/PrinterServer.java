@@ -17,16 +17,16 @@ import java.util.logging.Logger;
 import printerserver.server.Server;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import printerserver.MainScreen.Status;
 import printerserver.server.Debug;
 
 public class PrinterServer {
     
     private static Server server;
     private static Thread shutdown;
-    private static NewJFrame panel;
-    public static String ip = "";
+    private static MainScreen panel;
     private static final SystemTray systemTray = SystemTray.getSystemTray();
-    private static final TrayIcon trayIcon = new TrayIcon(new ImageIcon("D:/Anderson/twx.png", "omt").getImage(), "TWX");
+    private static final TrayIcon trayIcon = new TrayIcon(new ImageIcon("src/image.png", "omt").getImage(), "Printer Server");
     
     public static void main(String[] args){
         //Debug.debug = true;Debug.log = true;
@@ -42,31 +42,23 @@ public class PrinterServer {
                 System.exit(0);
             }
         }
-        try {
-            ip = getIp();
-        } catch (Exception ex) {
-            ip = "127.0.0.1";
-        }
         addIcon();
         addShutdown();
         show();
+        start();
+        panel.setTxt_status(Status.STARTED);
     }
     
     public static void show(){
         if(panel == null){
-            panel = new NewJFrame();
+            panel = new MainScreen();
         }
-        panel.setTxt_ip(ip);
-        panel.setTxt_port(String.valueOf(Server.PORT));
+        panel.setAddress(getIp(), Server.PORT);
         panel.setVisible(true);
     }
     
     public static void start(){
-        try {
-            PrinterServer.server.start();
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-        }
+        PrinterServer.server.start();
     }
     
     public static void stop(){
@@ -77,6 +69,12 @@ public class PrinterServer {
         server.stop();
         systemTray.remove(trayIcon);
         panel.dispose();
+    }
+    
+    public static void refresh(){
+        show();
+        start();
+        panel.setTxt_status(Status.STARTED);
     }
     
     private static boolean addIcon(){
@@ -118,24 +116,27 @@ public class PrinterServer {
         }
     }
     
-    public static String getIp() throws Exception{
+    public static String getIp(){
         long ips = 0;
-        String ipAddress = InetAddress.getLocalHost().getHostAddress().trim();
-        Enumeration<NetworkInterface> net = NetworkInterface.getNetworkInterfaces();
-        while (net.hasMoreElements()) {
-            NetworkInterface element = net.nextElement();
-            Enumeration<InetAddress> addresses = element.getInetAddresses();
-            while (addresses.hasMoreElements()) {
-                InetAddress ip = addresses.nextElement();
-                if (ip.isSiteLocalAddress()) {
-                    if((Long.valueOf(ip.getHostAddress().replace(".", "").trim())) < ips ||
-                            (ips == 0)){
-                        ips = Long.valueOf(ip.getHostAddress().replace(".", "").trim());
-                        ipAddress = ip.getHostAddress();
-                    }
-                }           
+        String ipAddress = "127.0.0.1";
+        try{
+            ipAddress = InetAddress.getLocalHost().getHostAddress().trim();
+            Enumeration<NetworkInterface> net = NetworkInterface.getNetworkInterfaces();
+            while (net.hasMoreElements()) {
+                NetworkInterface element = net.nextElement();
+                Enumeration<InetAddress> addresses = element.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress ip = addresses.nextElement();
+                    if (ip.isSiteLocalAddress()) {
+                        if((Long.valueOf(ip.getHostAddress().replace(".", "").trim())) < ips ||
+                                (ips == 0)){
+                            ips = Long.valueOf(ip.getHostAddress().replace(".", "").trim());
+                            ipAddress = ip.getHostAddress();
+                        }
+                    }           
+                }
             }
-        }
+        }catch (Exception e){}
         return ipAddress;
     }
 }
