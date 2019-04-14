@@ -19,6 +19,8 @@ public class Printer {
     
     private String printerName;
     private String zplCode;
+    protected static final String DIRLABELS = "etiquetas";
+    protected static final String PATHLABELS = DIRLABELS + "/";
 
     public Printer(String printerName, String zplCode) {
         this.printerName = QueryTransform.decode(printerName);
@@ -83,7 +85,8 @@ public class Printer {
     private void createFile(){
         try{
             String name = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
-            File file = new File(Server.PATHLABELS + name + ".txt");
+            File file = new File(PATHLABELS + name + ".txt");
+            file.mkdirs();
             if(!file.exists()) file.createNewFile();
             FileWriter writer = new FileWriter(file, true);
             writer.write(zplCode);

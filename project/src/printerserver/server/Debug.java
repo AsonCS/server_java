@@ -9,13 +9,30 @@ public class Debug {
     public static final String LOGSFILE = LOGSDIRETORY + "/error.txt";
     public static boolean debug = false;
     public static boolean log = false;
+    public static boolean info = false;
     
     public static void error(String mensage){
         if(debug) System.err.println(mensage);
     }
     
+    public static void error(Object object){
+        if(debug) System.err.println(object);
+    }
+    
+    public static void mensage(Object object){
+        if(debug) System.out.println(object);
+    }
+    
     public static void mensage(String mensage){
         if(debug) System.out.println(mensage);
+    }
+    
+    public static void info(String mensage){
+        if(info) System.out.println(mensage);
+    }
+    
+    public static void info(Object object){
+        if(info) System.out.println(object);
     }
     
     public static void logFile(String message){

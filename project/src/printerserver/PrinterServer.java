@@ -21,6 +21,7 @@ public class PrinterServer {
     public static void main(String[] args){
         //Debug.debug = true;
         //Debug.log = true;
+        Debug.info = true;
         for(String a : args){
             if(a.toLowerCase().equals("debug")) Debug.debug = true;
             if(a.toLowerCase().equals("log")) Debug.log = true;

@@ -16,7 +16,9 @@ public class Parameter {
         TEXT_ZPL,
         APPLICATION_JSON,
         TEXT_CSS,
-        TEXT_JAVASCRIPT
+        TEXT_JAVASCRIPT,
+        IMAGE_ICO,
+        IMAGE_PNG
     }
     
     public enum Encoding{
@@ -29,7 +31,7 @@ public class Parameter {
     }
     
     public static Method getMethod(String string){
-        Method method = Method.GET;
+        Method method;
         switch(string){
             case POST:
                 method = Method.POST;
@@ -57,7 +59,13 @@ public class Parameter {
                 type = "text/css";
                 break;       
             case TEXT_JAVASCRIPT:
-                type = "text/javascript";
+                type = "application/javascript";
+                break;      
+            case IMAGE_ICO:
+                type = "image/ico";
+                break;      
+            case IMAGE_PNG:
+                type = "image/png";
                 break;
             case TEXT_PLAIN:
             default:
@@ -85,10 +93,17 @@ public class Parameter {
             case "css":
                 type = ContentType.TEXT_CSS; 
                 break;     
+            case "application/javascript":
             case "text/javascript":
             case "javascript":
             case "js":
                 type = ContentType.TEXT_JAVASCRIPT;
+                break;
+            case "ico":
+                type = ContentType.IMAGE_ICO;
+                break;
+            case "png":
+                type = ContentType.IMAGE_PNG;
                 break;
             case "text/plain":
             default:
@@ -118,6 +133,19 @@ public class Parameter {
                 sts = "404 NOT FOUND";            
         }
         return sts;
+    }
+    
+    public static boolean isImage(ContentType type){
+        boolean resp;
+        switch (type) {
+            case IMAGE_ICO:
+            case IMAGE_PNG:
+                resp = true;
+                break;
+            default:
+                resp = false;
+        }
+        return resp;
     }
     
 }

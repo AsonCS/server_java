@@ -1,25 +1,20 @@
 package printerserver.server;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import printerserver.server.Parameter.*;
 
 public class Server {
     
-    public static final int PORT = 9101;
-    protected static final String DIRLABELS = "etiquetas";
-    protected static final String DIRTEMPLATES = "templates";
-    protected static final String DIRSTATICS = "statics";
-    protected static final String PATHLABELS = DIRLABELS + "/";
-    protected static final String PATHCONFIG = "src/config/config.templ";
+    public static int PORT;
+    protected static final String PATHCONFIG = "src/printerserver/server/config.templ";
     
     private ArrayList<Route> routes;
     private boolean runStatus = false;
@@ -27,26 +22,29 @@ public class Server {
     
     private ServerSocket servidor;
 
-    public Server() throws IOException{
+    public Server() throws IOException{       
+        Config config = new Config();
+        //System.out.println(config.toString());
+        config.setPort(9101);     
+        config.setIps("*");
+        config.setPrinters(Arrays.asList("123","456","789","TST","eee"));
+        //System.out.println(config.toString());
+        config.close();
+        PORT = config.getPort();
         servidor = new ServerSocket(PORT);
         this.routes = new ArrayList<>();
         addRoute("/config", Method.GET, configGet());
         addRoute("/config", Method.POST, configPost());
         addRoute("/config/{file}", Method.GET, configFilesGet());
-        addRoute("/static/{name1}", Method.GET, staticGet());
-        addRoute("/static/{name1}/{name2}", Method.GET, staticGet());
-        addRoute("/static/{name1}/{name2}/{name3}", Method.GET, staticGet());
-        addRoute("/static/{name1}/{name2}/{name3}/{name4}", Method.GET, staticGet());
-        addRoute("/static/{name1}/{name2}/{name3}/{name4}/{name5}", Method.GET, staticGet());
     }
     
     private String[] processRoute(String route){
         String[] response = new String[2];
-        response[0] = "";
+        response[0] = "/route";
         response[1] = "";
         route = route.split("[?]")[0];
         if(route.split("/").length <= 1){
-            response[0] = "/";
+            response[0] += "/";
             return response;
         }
         for(String b : route.split("/")){
@@ -78,9 +76,6 @@ public class Server {
             servidor = new ServerSocket(PORT);
         }
         if(routes.size() > 0){
-            new File(DIRLABELS).mkdirs();
-            new File(DIRSTATICS).mkdirs();
-            new File(DIRTEMPLATES).mkdirs();
             new Thread(){
                 @Override
                 public void run() {
@@ -141,7 +136,7 @@ public class Server {
             {"address","<h2>Address: " + getIp() + ":" + PORT + "/</h2>"},
             {"printers",a}
         };
-        return response.readFile(PATHCONFIG, variables).setContentType(ContentType.TEXT_HTML);
+        return response.readTemplate(PATHCONFIG, variables).setContentType(ContentType.TEXT_HTML);
     }
     
     public static String getIp(){
@@ -177,10 +172,8 @@ public class Server {
     
     private Handler configFilesGet(){
         return (request, response) -> {
-            String name = "src/config/" + request.getParams().get("file");
-            String[] a = name.split("\\.");
-            if(a.length > 0) response.setContentType(Parameter.indentifyContentType(a[a.length - 1]));
-            response.readFile(name);
+            String name = "src/printerserver/server/" + request.getParams().get("file");
+            response.readTemplate(name);
             return response;
         };
     }
@@ -188,19 +181,6 @@ public class Server {
     private Handler configPost(){
         return (request, response) -> {
             response = readForm(response);
-            return response;
-        };
-    }
-    
-    private Handler staticGet(){
-        return (request, response) -> {
-            String name = DIRSTATICS;
-            for(int i = 1; i <= request.getParams().keySet().size(); i++){
-                name += "/" + request.getParams().get("name"+i);
-            }
-            String[] a = name.split("\\.");
-            if(a.length > 0) response.setContentType(Parameter.indentifyContentType(a[a.length - 1]));
-            response.readFile(name);
             return response;
         };
     }

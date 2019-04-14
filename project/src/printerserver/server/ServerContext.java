@@ -11,7 +11,6 @@ import printerserver.server.Parameter.*;
 public class ServerContext implements Runnable{
     
     private Handler handler;
-    private Parameter[] parameters;
     private String header;
     private String body;
     private Method method;
@@ -105,10 +104,11 @@ public class ServerContext implements Runnable{
         return params;
     }
     
-    private byte[] selectRoute() throws UnsupportedEncodingException{
+    private byte[] selectRoute() throws Exception{
+        //Debug.info(url);
         for(Route route : routes){
-            //System.out.println(url.split("[?]")[0] + " - " + route.getRoute() + " - " + url.split("[?]")[0].matches(route.getRoute()) + " - " + route.getMethod().equals(method));
-            if(url.split("[?]")[0].matches(route.getRoute()) && route.getMethod().equals(method)){
+            //Debug.info(("/route" + url.split("[?]")[0]) + " - " + route.getRoute() + " - " + url.split("[?]")[0].matches(route.getRoute()) + " - " + route.getMethod().equals(method));
+            if(("/route" + url.split("[?]")[0]).matches(route.getRoute()) && route.getMethod().equals(method)){
                 Debug.mensage("Cliente conectado: " + hostAddress);
                 route.setParams(processUrl(url, route.getKeys()));
                 return route.getHandler()
@@ -116,10 +116,7 @@ public class ServerContext implements Runnable{
                         .getBytes();
             }
         }
-        String headerResponse = "HTTP/1.1 404 NOT FOUND\r\n"
-                + "Server: Anderson : 1.0\r\n"
-                + "Date: " + new Date().toString() + "\r\n\r\n";
-        return headerResponse.getBytes(Parameter.getEncoding(Encoding.UTF_8));
+        return new Response().readTemplate(url.split("[?]")[0].substring(1, url.split("[?]")[0].length())).getBytes();
     }
     
 }

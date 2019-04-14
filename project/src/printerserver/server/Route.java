@@ -70,6 +70,8 @@ public class Route implements Comparable<Route>{
 
     @Override
     public int compareTo(Route o) {
+        if(o.getRoute().equals("/(.)+")) return -1;
+        if(getRoute().equals("/(.)+")) return 1;
         String[] a = getRoute().split("/");
         String[] b = o.getRoute().split("/");
         if(a.length == b.length){

@@ -1,9 +1,11 @@
 package printerserver.server;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import javax.imageio.ImageIO;
 import printerserver.server.Parameter.*;
 
 public class Response {
@@ -12,9 +14,11 @@ public class Response {
     private ContentType contentType;
     private Encoding encoding;
     private Status status;
+    private byte[] bytes;
 
     public Response() {
         body = "";
+        bytes = new byte[0];
         contentType = ContentType.TEXT_PLAIN;
         encoding = Encoding.UTF_8;
         status = Status.OK;
@@ -62,9 +66,14 @@ public class Response {
     }
     
     public Response readTemplate(String file){
-        file = Server.DIRTEMPLATES + "/" + file; 
-        setBody(readFile(file));
-        if(getBody().length() == 0) return setStatus(Status.NOT_FOUND);
+        String[] a = file.split("\\.");
+        if(a.length > 0) setContentType(Parameter.indentifyContentType(a[a.length - 1]));
+        if(Parameter.isImage(contentType)){
+            readImg(file, a[a.length - 1]);
+        }else{
+            readFile(file);
+        }
+        if(getBody().length() == 0 && bytes.length == 0) return setStatus(Status.NOT_FOUND);
         return this;
     }
     
@@ -83,42 +92,47 @@ public class Response {
         return this;
     }
     
-    protected Response readFile(String file, String[][] variables){
-        String a = readFile(file);
-        if(variables != null){
-            for(String[] b : variables){
-                if(b.length != 2) continue;
-                a = a.replaceFirst("\\{\\{[\\s]*" + b[0] + "[\\s]*\\}\\}", b[1]);
-            }
-        }
-        a = a.replaceAll("\\{\\{([^\\{\\}])*\\}\\}", "");
-        setBody(a);
-        if(getBody().length() == 0) return setStatus(Status.NOT_FOUND);
-        return this;
-    }
-    
-    protected String readFile(String fileName){
-        String a = "";
+    private void readFile(String fileName){
+        //Debug.info(fileName);
         try{
-            File file = new File(fileName);
-            if(file.exists()){
-                FileReader fileReader = new FileReader(file);
-                char[] buffer = new char[1024];
-                while(fileReader.read(buffer) != -1) a += String.copyValueOf(buffer);
-                return a;
-            }
-        }catch (Exception e){}
-        return "";
+            FileReader fileReader = new FileReader(new File(fileName));
+            char[] buffer = new char[1024];
+            setBody("");
+            while(fileReader.read(buffer) != -1) putBody(String.copyValueOf(buffer));
+            fileReader.close();
+        }catch (Exception e){
+            setBody("");
+            Debug.error(e.getMessage());
+        }
     }
     
-    protected byte[] getBytes() throws UnsupportedEncodingException{
+    private void readImg(String fileName, String type){
+        try{
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ImageIO.write(ImageIO.read(new File(fileName)), type, outputStream);
+            bytes = outputStream.toByteArray();
+        }catch (Exception e){
+            bytes = new byte[0];
+            Debug.error(e.getMessage());
+        }
+    }
+    
+    protected byte[] getBytes() throws Exception{
+        String encod = (Parameter.isImage(contentType)) ? "" : ";charset=" + Parameter.getEncoding(encoding);
+        int length = (Parameter.isImage(contentType)) ? bytes.length : body.length();
         String headerResponse = "HTTP/1.1 ";
         headerResponse += Parameter.getStatus(status);
         headerResponse += "\r\nServer: Anderson : 1.0";
         headerResponse += "\r\nDate: " + new Date().toString();
-        headerResponse += "\r\nContent-length: " + body.getBytes(Parameter.getEncoding(encoding)).length;
-        headerResponse += "\r\nContent-type: " + Parameter.getContentType(contentType) + ";charset=" + Parameter.getEncoding(encoding);
+        headerResponse += "\r\nContent-length: " + length;
+        headerResponse += "\r\nContent-type: " + Parameter.getContentType(contentType) + encod;
         headerResponse += "\r\n\r\n";
+        if(Parameter.isImage(contentType)){
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            outputStream.write(headerResponse.getBytes(Parameter.getEncoding(encoding)));
+            outputStream.write(bytes);
+            return outputStream.toByteArray();
+        }
         return headerResponse.concat(body).getBytes(Parameter.getEncoding(encoding));
     }
     

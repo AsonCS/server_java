@@ -59,7 +59,7 @@ public class CreateRoutes {
                 a += "<tr><td>" + QueryTransform.decode(b) + "</td><td>" + b + "</td></tr>";
             }
             String[][] b = {{"printers",a}};
-            return response.readTemplate("printers.html", b).setContentType(ContentType.TEXT_HTML);
+            return response.readTemplate("templates/printers.html", b);
         };
     }
     
@@ -72,13 +72,13 @@ public class CreateRoutes {
                 {"address","<h2>Address: " + a + "</h2>"},
                 {"name",c}
             };
-            return response.readTemplate("hello.html", b).setContentType(ContentType.TEXT_HTML);
+            return response.readTemplate("templates/hello.html", b);
         };
     }
     
     private Handler zplCode(){
         return (request, response) -> {
-            return response.readTemplate("zpl_code.html").setContentType(ContentType.TEXT_HTML);
+            return response.readTemplate("templates/zpl_code.html");
         };
     }
     
