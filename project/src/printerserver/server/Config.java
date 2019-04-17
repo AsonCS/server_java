@@ -10,11 +10,11 @@ import javafx.print.Collation;
 
 public class Config {    
     
-    protected static final String PATHCONFIG = "src/printerserver/server/config";
+    protected static final String PATHCONFIG = "src/config";
     protected static final String TEMPL = PATHCONFIG + "/config.templ";
     protected static final String CONFIG = PATHCONFIG + "/config.config";    
     
-    private int port = 9101;
+    private int port = Server.PORT;
     private String ips = "*";
     private List<String> printers = Arrays.asList("");
     private String config = "", rep;

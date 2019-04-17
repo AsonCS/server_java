@@ -3,6 +3,8 @@ package printerserver;
 import java.io.IOException;
 import jdk.nashorn.api.scripting.AbstractJSObject;
 import jdk.nashorn.api.scripting.JSObject;
+import printerserver.server.Config;
+import printerserver.server.Debug;
 import printerserver.server.Handler;
 import printerserver.server.Parameter;
 import printerserver.server.Parameter.*;
@@ -11,11 +13,26 @@ import printerserver.server.Printer;
 import printerserver.server.QueryTransform;
 import printerserver.server.Request;
 import printerserver.server.Response;
+import static printerserver.server.Server.PORT;
+import static printerserver.server.Server.getIp;
 
 public class CreateRoutes {
     
-    public Server getServer() throws IOException{
+    protected static final String PATHCONFIG = "src/config/";
+    
+    public Server getServer() throws IOException{ 
+        /*Config config = new Config();
+        //System.out.println(config.toString());
+        config.setPort(9101);     
+        config.setIps("*");
+        config.setPrinters(Arrays.asList("123","456","789","TST","eee"));
+        //System.out.println(config.toString());
+        config.close();
+        PORT = config.getPort();// */
         return new Server()
+                .addRoute("/config", Method.GET, configGet())
+                .addRoute("/config", Method.POST, configPost())
+                .addRoute("/config/{file}", Method.GET, configFilesGet())
                 .addRoute("/printer/{name}", Method.POST, printPost())
                 .addRoute("/printers", Method.GET, printersGet())
                 .addRoute("/printers", Method.POST, printersPost())
@@ -23,6 +40,56 @@ public class CreateRoutes {
                 .addRoute("/{name}", Method.GET, handler())
                 .addRoute("/", Method.GET, handler())
         ;
+    }
+    
+    private Response readForm(Response response){        
+        String a = "", b = "", c = "", d = "";
+        for(String z : Printer.getPrinters()){
+            a += "<tr><td>" + QueryTransform.decode(z) + "</td></tr>";
+        }
+        Config config = new Config();
+        for(String z : config.getPrinters()){
+            b += "<tr><td>" + z + "</td></tr>";
+        }
+        for(int i = 1; i <= config.getPrinters().size(); i++){
+            c += "<tr>"
+                    + "<td><label>Printer: "
+                        + "<input type=\"text\" name=\"printer" + i + "\" value=\"" + config.getPrinters().get(i-1) + "\" />"
+                    + "</label></td>"
+                    + "<td><input type=\"button\" value=\"add\" /></td><td><input type=\"button\" value=\"rmv\" /></td>"
+                + "</tr>";
+        }
+        String[][] variables = {
+            {"address","<h2>Address: " + getIp() + ":" + PORT + "/</h2>"},
+            {"printers",a},
+            {"scapes",b},
+            {"body",c}
+        };
+        return response.readTemplate(PATHCONFIG + "config.templ", variables).setContentType(ContentType.TEXT_HTML);
+    }
+    
+    private Handler configGet(){
+        return (request, response) -> {
+            response = readForm(response);
+            return response;
+        };
+    }
+    
+    private Handler configFilesGet(){
+        return (request, response) -> {
+            String name = PATHCONFIG + request.getParams().get("file");
+            response.readTemplate(name);
+            return response;
+        };
+    }
+    
+    private Handler configPost(){
+        return (request, response) -> {
+            request.processKeyValue();
+            Debug.info(request.getParams());
+            response = readForm(response);
+            return response;
+        };
     }
     
     private Handler printPost(){

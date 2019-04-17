@@ -1,10 +1,12 @@
 package printerserver.server;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.Scanner;
 import javax.imageio.ImageIO;
 import printerserver.server.Parameter.*;
 
@@ -95,11 +97,9 @@ public class Response {
     private void readFile(String fileName){
         //Debug.info(fileName);
         try{
-            FileReader fileReader = new FileReader(new File(fileName));
-            char[] buffer = new char[1024];
-            setBody("");
-            while(fileReader.read(buffer) != -1) putBody(String.copyValueOf(buffer));
-            fileReader.close();
+            Scanner arq = new Scanner(new File(fileName));
+            while(arq.hasNextLine()) putBody(arq.nextLine());
+            arq.close();
         }catch (Exception e){
             setBody("");
             Debug.error(e.getMessage());

@@ -1,0 +1,46 @@
+<!DOCTYPE htm>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="shortcut icon" href="img/favicon.png">
+        <link href="config/config1.css" rel="stylesheet" />
+    </head>
+    <body>
+        {{  address  }}
+        <br>
+        <br>
+        <table>
+            <thead>
+                <tr><th>Printer name</th></tr>
+            </thead>
+            <tbody>
+                {{ printers }}
+            </tbody>
+        </table>
+        <br>
+        <br>
+        <table>
+            <thead>
+                <tr><th>Scape printers name</th></tr>
+            </thead>
+            <tbody>
+                {{ scapes }}
+            </tbody>
+        </table>
+        <br>
+        <br>
+        <form action="/config" method="POST" target="_self">
+            <table>
+                <thead>
+                    <tr><th>Printers name for scape.</th></tr>
+                </thead>
+                <tbody>
+                    {{ body }}
+                </tbody>
+            </table>
+                        
+            <input type="submit" value="enviar" />
+        </form>
+    </body>
+</html>
+

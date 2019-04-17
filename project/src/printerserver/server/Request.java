@@ -75,4 +75,9 @@ public class Request {
         if(i != -1 && header.length() > i + j) contentType = Parameter.indentifyContentType(header.substring(i, i + j).split(";")[0]);
     }
     
+    public Request processKeyValue(){
+        params = QueryTransform.getKeyValue(getBody(), params);
+        return this;
+    }
+    
 }

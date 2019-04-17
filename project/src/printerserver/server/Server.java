@@ -13,8 +13,7 @@ import printerserver.server.Parameter.*;
 
 public class Server {
     
-    public static int PORT;
-    protected static final String PATHCONFIG = "src/printerserver/server/config.templ";
+    public static int PORT = 9101;
     
     private ArrayList<Route> routes;
     private boolean runStatus = false;
@@ -22,20 +21,16 @@ public class Server {
     
     private ServerSocket servidor;
 
-    public Server() throws IOException{       
-        Config config = new Config();
-        //System.out.println(config.toString());
-        config.setPort(9101);     
-        config.setIps("*");
-        config.setPrinters(Arrays.asList("123","456","789","TST","eee"));
-        //System.out.println(config.toString());
-        config.close();
-        PORT = config.getPort();
+    public Server(int port) throws IOException, Exception{
+        if(port < 1 || port > 9999) throw new Exception("Invalid port number.");
+        PORT = port;
         servidor = new ServerSocket(PORT);
         this.routes = new ArrayList<>();
-        addRoute("/config", Method.GET, configGet());
-        addRoute("/config", Method.POST, configPost());
-        addRoute("/config/{file}", Method.GET, configFilesGet());
+    }
+
+    public Server() throws IOException{      
+        servidor = new ServerSocket(PORT);
+        this.routes = new ArrayList<>();
     }
     
     private String[] processRoute(String route){
@@ -127,16 +122,11 @@ public class Server {
         return this;
     }
     
-    private Response readForm(Response response){        
-        String a = "";
-        for(String b : Printer.getPrinters()){
-            a += "<tr><td>" + QueryTransform.decode(b) + "</td></tr>";
-        }
-        String[][] variables = {
-            {"address","<h2>Address: " + getIp() + ":" + PORT + "/</h2>"},
-            {"printers",a}
-        };
-        return response.readTemplate(PATHCONFIG, variables).setContentType(ContentType.TEXT_HTML);
+    public Server refresh(int port) throws Exception, IOException{
+        stop();
+        if(port < 1 || port > 9999) throw new Exception("Invalid port number.");
+        PORT = port;
+        return init();        
     }
     
     public static String getIp(){
@@ -161,28 +151,6 @@ public class Server {
             }
         }catch (Exception e){}
         return ipAddress;
-    }
-    
-    private Handler configGet(){
-        return (request, response) -> {
-            response = readForm(response);
-            return response;
-        };
-    }
-    
-    private Handler configFilesGet(){
-        return (request, response) -> {
-            String name = "src/printerserver/server/" + request.getParams().get("file");
-            response.readTemplate(name);
-            return response;
-        };
-    }
-    
-    private Handler configPost(){
-        return (request, response) -> {
-            response = readForm(response);
-            return response;
-        };
     }
     
 }
