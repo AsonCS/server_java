@@ -3,7 +3,10 @@ package printerserver.server;
 import java.io.File;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import javax.print.Doc;
 import javax.print.DocFlavor;
 import javax.print.DocPrintJob;
@@ -23,7 +26,7 @@ public class Printer {
     protected static final String PATHLABELS = DIRLABELS + "/";
 
     public Printer(String printerName, String zplCode) {
-        this.printerName = QueryTransform.decode(printerName);
+        this.printerName = printerName;
         this.zplCode = zplCode;
     }
 
@@ -45,14 +48,18 @@ public class Printer {
         return this;
     }
     
-    public static String[] getPrinters(){
-        PrintService[] printers = PrintServiceLookup.lookupPrintServices(null, null);
-        String[] response = new String[printers.length + 1];
-        response[0] = "TST";
-        for(int i = 0; i < printers.length; i++){
-            response[i + 1] = QueryTransform.encode(printers[i].getName());
+    public static List<String> getPrinters(){
+        List<String> list = Arrays.asList("TST","11\\\\\\1","22///2","33 3  ","4  44");
+        for(PrintService ps : PrintServiceLookup.lookupPrintServices(null, null)){
+            list.add(ps.getName());
         }
-        return response;
+        return list;
+    }
+    
+    public static List<String> getPrinters(List<String> filters){
+        ArrayList<String> list = new ArrayList<>(getPrinters());
+        list.removeAll(filters);
+        return list;
     }
     
     public void print() throws Exception, PrintException{

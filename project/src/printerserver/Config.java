@@ -1,4 +1,4 @@
-package printerserver.server;
+package printerserver;
 
 import java.io.File;
 import java.io.FileReader;
@@ -6,7 +6,9 @@ import java.io.FileWriter;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import javafx.print.Collation;
+import printerserver.server.Server;
 
 public class Config {    
     
@@ -16,7 +18,7 @@ public class Config {
     
     private int port = Server.PORT;
     private String ips = "*";
-    private List<String> printers = Arrays.asList("");
+    private List<String> printers = Arrays.asList();
     private String config = "", rep;
 
     public Config() {
@@ -75,10 +77,9 @@ public class Config {
         try{
             File file = new File(fileName);
             if(file.exists()){
-                FileReader fileReader = new FileReader(file);
-                char[] buffer = new char[1024];
-                while(fileReader.read(buffer) != -1) a += String.copyValueOf(buffer);
-                fileReader.close();
+                Scanner arq = new Scanner(file);
+                while(arq.hasNextLine()) a += arq.nextLine() + "\n";
+                arq.close();
                 return a;
             }
         }catch (Exception e){}

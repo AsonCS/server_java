@@ -76,7 +76,7 @@ public class Request {
     }
     
     public Request processKeyValue(){
-        params = QueryTransform.getKeyValue(getBody(), params);
+        params = QueryTransform.getKeyValue(getBody().replace("+", "%20"), params);
         return this;
     }
     
