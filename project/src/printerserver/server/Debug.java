@@ -19,6 +19,10 @@ public class Debug {
         if(debug) System.err.println(object);
     }
     
+    public static void error(Exception e){
+        if(debug) e.printStackTrace();
+    }
+    
     public static void mensage(Object object){
         if(debug) System.out.println(object);
     }

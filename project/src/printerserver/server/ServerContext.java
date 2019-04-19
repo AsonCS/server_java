@@ -38,11 +38,13 @@ public class ServerContext implements Runnable{
             cliente.getOutputStream().write(httpResponse);
             cliente.getOutputStream().flush();
         }catch(Exception e){
-            Debug.error(e.getMessage());
+            Debug.error(e);
         }finally{
             try{
                 cliente.close();
-            }catch (Exception e){}
+            }catch (Exception e){
+                Debug.error(e);           
+            }
         }
     }
     
@@ -95,17 +97,11 @@ public class ServerContext implements Runnable{
         }
         if(url.split("[?]").length > 1){
             params = QueryTransform.getKeyValue(url.split("[?]")[1], params);
-            /*/
-            for(String b : url.split("[?]")[1].split("&")){
-                if(b.split("=").length > 1) params.put(b.split("=")[0], b.split("=")[1]);
-                else params.put(b.split("=")[0], "");
-            }// */
         }
         return params;
     }
     
     private byte[] selectRoute() throws Exception{
-        //Debug.info(url);
         for(Route route : routes){
             //Debug.info(("/route" + url.split("[?]")[0]) + " - " + route.getRoute() + " - " + url.split("[?]")[0].matches(route.getRoute()) + " - " + route.getMethod().equals(method));
             if(("/route" + url.split("[?]")[0]).matches(route.getRoute()) && route.getMethod().equals(method)){
@@ -116,7 +112,7 @@ public class ServerContext implements Runnable{
                         .getBytes();
             }
         }
-        return new Response().readTemplate(url.split("[?]")[0].substring(1, url.split("[?]")[0].length())).getBytes();
+        return new Response().readFile(url.split("[?]")[0].substring(1, url.split("[?]")[0].length())).getBytes();
     }
     
 }
