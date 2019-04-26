@@ -67,20 +67,20 @@ public class Response {
         return this;
     }
     
-    public Response readTemplate(String file){
+    public Response readFile(String file){
         String[] a = file.split("\\.");
         if(a.length > 0) setContentType(Parameter.indentifyContentType(a[a.length - 1]));
         if(Parameter.isImage(contentType)){
             readImg(file, a[a.length - 1]);
         }else{
-            readFile(file);
+            readTextFile(file);
         }
         if(getBody().length() == 0 && bytes.length == 0) return setStatus(Status.NOT_FOUND);
         return this;
     }
     
     public Response readTemplate(String file, String[][] variables){
-        readTemplate(file);
+        readFile(file);
         if(getBody().length() == 0) return this;
         String a = getBody();
         if(variables != null){
@@ -94,11 +94,11 @@ public class Response {
         return this;
     }
     
-    private void readFile(String fileName){
+    private void readTextFile(String fileName){
         //Debug.info(fileName);
         try{
             Scanner arq = new Scanner(new File(fileName));
-            while(arq.hasNextLine()) putBody(arq.nextLine());
+            while(arq.hasNextLine()) putBody(arq.nextLine() + "\n");
             arq.close();
         }catch (Exception e){
             setBody("");
@@ -111,6 +111,7 @@ public class Response {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             ImageIO.write(ImageIO.read(new File(fileName)), type, outputStream);
             bytes = outputStream.toByteArray();
+            outputStream.close();
         }catch (Exception e){
             bytes = new byte[0];
             Debug.error(e.getMessage());
@@ -126,6 +127,7 @@ public class Response {
         headerResponse += "\r\nDate: " + new Date().toString();
         headerResponse += "\r\nContent-length: " + length;
         headerResponse += "\r\nContent-type: " + Parameter.getContentType(contentType) + encod;
+        headerResponse += "\r\nAccess-Control-Allow-Origin: *";
         headerResponse += "\r\n\r\n";
         if(Parameter.isImage(contentType)){
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

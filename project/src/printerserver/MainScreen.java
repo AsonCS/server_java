@@ -5,6 +5,11 @@
  */
 package printerserver;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,17 +32,17 @@ public class MainScreen extends javax.swing.JFrame {
     }
     
     public void setAddress(String ip, int port){
-        this.txt_address.setText("  " + ip + ":" + port + "/  ");
+        this.lbl_address.setText("  " + ip + ":" + port + "/  ");
     }
     
     public void setTxt_status(Status status){
         switch (status){
             case STARTED:
-                this.txt_status.setText("  Runing  ");
+                this.lbl_status.setText("  Runing  ");
                 break;
             case PAUSED:
             default:
-                this.txt_status.setText("  Paused  ");
+                this.lbl_status.setText("  Paused  ");
         }
     }
     
@@ -64,9 +69,10 @@ public class MainScreen extends javax.swing.JFrame {
         btn_quit = new javax.swing.JButton();
         btn_refresh = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        txt_address = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        txt_status = new javax.swing.JTextField();
+        btn_copy = new javax.swing.JButton();
+        lbl_status = new javax.swing.JLabel();
+        lbl_address = new javax.swing.JLabel();
 
         jLabel2.setText("IP address: ");
 
@@ -111,14 +117,18 @@ public class MainScreen extends javax.swing.JFrame {
 
         jLabel3.setText("Address: ");
 
-        txt_address.setEditable(false);
-        txt_address.setSelectionColor(new java.awt.Color(255, 255, 255));
-
         jLabel4.setText("Status:");
 
-        txt_status.setEditable(false);
-        txt_status.setText("Paused");
-        txt_status.setSelectionColor(new java.awt.Color(255, 255, 255));
+        btn_copy.setText("Copy");
+        btn_copy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_copyActionPerformed(evt);
+            }
+        });
+
+        lbl_status.setText("Paused");
+
+        lbl_address.setText("   ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -139,11 +149,13 @@ public class MainScreen extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_address, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lbl_address)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_copy))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_status, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lbl_status)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -154,18 +166,19 @@ public class MainScreen extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txt_address, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_copy)
+                    .addComponent(lbl_address))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txt_status, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lbl_status))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_start)
                     .addComponent(btn_stop)
                     .addComponent(btn_quit)
                     .addComponent(btn_refresh))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
@@ -189,6 +202,12 @@ public class MainScreen extends javax.swing.JFrame {
     private void btn_refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_refreshActionPerformed
         PrinterServer.refresh();
     }//GEN-LAST:event_btn_refreshActionPerformed
+
+    private void btn_copyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_copyActionPerformed
+        Clipboard board = Toolkit.getDefaultToolkit().getSystemClipboard();
+        ClipboardOwner selecao = new StringSelection(lbl_address.getText().trim());
+        board.setContents((Transferable) selecao, selecao);
+    }//GEN-LAST:event_btn_copyActionPerformed
 
     /**
      * @param args the command line arguments
@@ -227,6 +246,7 @@ public class MainScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_copy;
     private javax.swing.JButton btn_quit;
     private javax.swing.JButton btn_refresh;
     private javax.swing.JButton btn_start;
@@ -235,10 +255,10 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel lbl_address;
+    private javax.swing.JLabel lbl_status;
     private javax.swing.JLabel lbl_title;
     private javax.swing.JLabel lbl_title1;
-    private javax.swing.JTextField txt_address;
     private javax.swing.JTextField txt_ip1;
-    private javax.swing.JTextField txt_status;
     // End of variables declaration//GEN-END:variables
 }

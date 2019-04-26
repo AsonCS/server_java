@@ -5,8 +5,11 @@ import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import javafx.print.Collation;
 import javax.print.Doc;
 import javax.print.DocFlavor;
 import javax.print.DocPrintJob;
@@ -21,13 +24,13 @@ import javax.print.attribute.PrintServiceAttributeSet;
 public class Printer {
     
     private String printerName;
-    private String zplCode;
+    private String code;
     protected static final String DIRLABELS = "etiquetas";
     protected static final String PATHLABELS = DIRLABELS + "/";
 
     public Printer(String printerName, String zplCode) {
         this.printerName = printerName;
-        this.zplCode = zplCode;
+        this.code = zplCode;
     }
 
     public String getPrinterName() {
@@ -39,17 +42,17 @@ public class Printer {
         return this;
     }
 
-    public String getZplCode() {
-        return zplCode;
+    public String getCode() {
+        return code;
     }
 
-    public Printer setZplCode(String zplCode) {
-        this.zplCode = zplCode;
+    public Printer setCode(String zplCode) {
+        this.code = zplCode;
         return this;
     }
     
     public static List<String> getPrinters(){
-        List<String> list = Arrays.asList("TST","11\\\\\\1","22///2","33 3  ","4  44");
+        ArrayList<String> list = new ArrayList<>(Arrays.asList("TST"));
         for(PrintService ps : PrintServiceLookup.lookupPrintServices(null, null)){
             list.add(ps.getName());
         }
@@ -58,17 +61,16 @@ public class Printer {
     
     public static List<String> getPrinters(List<String> filters){
         ArrayList<String> list = new ArrayList<>(getPrinters());
-        list.removeAll(filters);
-        return list;
-    }
+        return list.stream().filter(e -> filters.contains(e) || e.toLowerCase().equals("tst")).collect(Collectors.toList());
+     }
     
     public void print() throws Exception, PrintException{
         
         if(printerName == null) throw new Exception("Sem nome de impressora.");
-        if(zplCode == null) throw new Exception("Sem código zpl.");
+        if(code == null) throw new Exception("Sem código zpl.");
         
         if(printerName.toLowerCase().equals("tst")){
-            createFile();
+            createFile(printerName.toUpperCase());
             return;
         }
         
@@ -84,26 +86,26 @@ public class Printer {
         
         DocPrintJob job = printer.createPrintJob();
         DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE; 
-        Doc doc = new SimpleDoc(zplCode.getBytes(), flavor, null);
-        createFile();
+        Doc doc = new SimpleDoc(code.getBytes(), flavor, null);
+        createFile(printerName.toUpperCase());
         job.print(doc, null);
     }
     
-    private void createFile(){
+    private void createFile(String name){
         try{
-            String name = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+            name += "_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+            new File(DIRLABELS).mkdirs();
             File file = new File(PATHLABELS + name + ".txt");
-            file.mkdirs();
             if(!file.exists()) file.createNewFile();
             FileWriter writer = new FileWriter(file, true);
-            writer.write(zplCode);
+            writer.write(code);
             writer.close();
         }catch (Exception e){}
     }
 
     @Override
     public String toString() {
-        return "Printer{" + "printerName=" + printerName + ", zplCode=" + zplCode + '}';
+        return "Printer{" + "printerName=" + printerName + ", zplCode=" + code + '}';
     }
     
     /*/

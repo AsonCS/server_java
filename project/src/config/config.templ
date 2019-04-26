@@ -2,47 +2,23 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <link rel="shortcut icon" href="img/favicon.png">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="shortcut icon" href="img/favicon.png" />
         <link href="config/config1.css" rel="stylesheet" />
     </head>
     <body>
         <div class="container">
-            <br>
-            <br>
-            {{  address  }}
-            <br>
-            <br>
-            <table class="table">
-                <thead>
-                    <tr><th>Printer name</th></tr>
-                </thead>
-                <tbody>
-                    {{ printers }}
-                </tbody>
-            </table>
-            <br>
-            <br>
-            <table class="table">
-                <thead>
-                    <tr><th>Scape printers name</th></tr>
-                </thead>
-                <tbody>
-                    {{ scapes }}
-                </tbody>
-            </table>
-            <br>
-            <br>
             <form action="/config" method="POST" target="_self">
                 <table class="table">
                     <thead>
-                        <tr><th colspan="3">Printers name for scape.</th></tr>
+                        <tr><th>Printers name.</th></tr>
                     </thead>
                     <tbody>
                         {{ body }}
                     </tbody>
                 </table>
 
-                <input type="submit" value="enviar" />
+                <input type="submit" value="gravar" />
             </form>
         </div>
     </body>

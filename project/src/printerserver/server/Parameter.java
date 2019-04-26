@@ -18,7 +18,8 @@ public class Parameter {
         TEXT_CSS,
         TEXT_JAVASCRIPT,
         IMAGE_ICO,
-        IMAGE_PNG
+        IMAGE_PNG,
+        IMAGE_SVG
     }
     
     public enum Encoding{
@@ -66,6 +67,9 @@ public class Parameter {
                 break;      
             case IMAGE_PNG:
                 type = "image/png";
+                break;      
+            case IMAGE_SVG:
+                type = "image/svg+xml";
                 break;
             case TEXT_PLAIN:
             default:
@@ -104,6 +108,9 @@ public class Parameter {
                 break;
             case "png":
                 type = ContentType.IMAGE_PNG;
+                break;
+            case "svg":
+                type = ContentType.IMAGE_SVG;
                 break;
             case "text/plain":
             default:

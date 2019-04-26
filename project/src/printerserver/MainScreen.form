@@ -64,12 +64,14 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel3" min="-2" pref="70" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txt_address" max="-2" attributes="0"/>
+                      <Component id="lbl_address" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btn_copy" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel4" min="-2" pref="70" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txt_status" max="-2" attributes="0"/>
+                      <Component id="lbl_status" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -84,12 +86,13 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txt_address" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btn_copy" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbl_address" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txt_status" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbl_status" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -98,7 +101,7 @@
                   <Component id="btn_quit" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btn_refresh" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="18" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -146,26 +149,27 @@
         <Property name="text" type="java.lang.String" value="Address: "/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txt_address">
-      <Properties>
-        <Property name="editable" type="boolean" value="false"/>
-        <Property name="selectionColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-        </Property>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
         <Property name="text" type="java.lang.String" value="Status:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txt_status">
+    <Component class="javax.swing.JButton" name="btn_copy">
       <Properties>
-        <Property name="editable" type="boolean" value="false"/>
+        <Property name="text" type="java.lang.String" value="Copy"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_copyActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbl_status">
+      <Properties>
         <Property name="text" type="java.lang.String" value="Paused"/>
-        <Property name="selectionColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbl_address">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="   "/>
       </Properties>
     </Component>
   </SubComponents>

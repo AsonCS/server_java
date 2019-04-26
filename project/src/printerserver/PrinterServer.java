@@ -21,10 +21,11 @@ public class PrinterServer {
     public static void main(String[] args){
         //Debug.debug = true;
         //Debug.log = true;
-        Debug.info = true;
+        //Debug.info = true;
         for(String a : args){
             if(a.toLowerCase().equals("debug")) Debug.debug = true;
             if(a.toLowerCase().equals("log")) Debug.log = true;
+            if(a.toLowerCase().equals("info")) Debug.info = true;
         }
         if(server == null){
             try {
@@ -73,7 +74,7 @@ public class PrinterServer {
     private static boolean addIcon(){
         if (SystemTray.isSupported()) {   
             systemTray = SystemTray.getSystemTray();
-            trayIcon = new TrayIcon(new ImageIcon("src/config/image.png", "omt").getImage(), "Printer Server");
+            trayIcon = new TrayIcon(new ImageIcon("src/image.png", "omt").getImage(), "Printer Server");
             trayIcon.setImageAutoSize(true);// Autosize icon base on space
 
             MouseAdapter mouseAdapter = new MouseAdapter() {
