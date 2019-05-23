@@ -105,7 +105,7 @@ public class ServerContext implements Runnable{
         for(Route route : routes){
             //Debug.info(("/route" + url.split("[?]")[0]) + " - " + route.getRoute() + " - " + url.split("[?]")[0].matches(route.getRoute()) + " - " + route.getMethod().equals(method));
             if(("/route" + url.split("[?]")[0]).matches(route.getRoute()) && route.getMethod().equals(method)){
-                Debug.mensage("Cliente conectado: " + hostAddress);
+                Debug.message("Cliente conectado: " + hostAddress);
                 route.setParams(processUrl(url, route.getKeys()));
                 return route.getHandler()
                         .handler(new Request(header, body, method, route.getParams()), new Response())
