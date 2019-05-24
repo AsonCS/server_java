@@ -11,15 +11,15 @@ import java.util.Enumeration;
 import printerserver.server.Parameter.*;
 
 /**
- * Object for create and configure the server with routes.
+ * Object to create and configure the server with routes which will treat requests.
  * 
- * This class select which port will be used for server, and load the routes for
- * treat requests of client side.
+ * This object select which port will be used for server, and load the routes for
+ * treat requests from client side.
  *
  * @author Anderson Costa
- * @version 1.0
+ * @version 2019/01
  *
- * @see <a href="https://github.com/AsonCS" target="_blank">My repository on GitHub</a>
+ * @see <a href="https://github.com/AsonCS/server_java" target="_blank">Repository on GitHub</a>
  */
 public class Server {
     
@@ -37,9 +37,9 @@ public class Server {
     /**
      * Constructor for server with port number.
      * 
-     * @param port Number for server in.
-     * @throws IOException Exception of socket.
-     * @throws Exception Exception for <em><i>Invalid port number.</i></em>
+     * @param port Number for run the server.
+     * @throws IOException {@link IOException}.
+     * @throws Exception {@link Exception} for <em><i>Invalid port number.</i></em>
      */
     public Server(int port) throws IOException, Exception{
         if(port < 1 || port > 9999) throw new Exception("Invalid port number.");
@@ -51,7 +51,7 @@ public class Server {
     /**
      * Constructor for server without port number, which will be pattern port.
      * 
-     * @throws IOException Exception of socket.
+     * @throws IOException {@link IOException}.
      */
     public Server() throws IOException{      
         servidor = new ServerSocket(PORT);
@@ -80,12 +80,12 @@ public class Server {
     }
     
     /**
-     * Method for add routes for treat request of client side.
+     * Method for add routes for treat request from client side.
      *
      * @param route Route string which identifies <i>url</i> requested. 
-     * @param method Method <i>HTTP</i> of request route.
-     * @param handler Method for treat this request route.
-     * @return This object server.
+     * @param method {@link Method} <i>HTTP</i> of request route.
+     * @param handler {@link Handler} for treat this request route.
+     * @return {@link Server}.
      */
     public Server addRoute(String route, Method method, Handler handler){
         String[] map = processRoute(route);
@@ -98,7 +98,7 @@ public class Server {
      * Method for remove routes.
      *
      * @param idx Index of route which will be removed.
-     * @return This object server.
+     * @return {@link Server}.
      */
     public Server removeRoute(int idx){
         if(idx > -1 && idx < routes.size()) routes.remove(idx);
@@ -106,10 +106,10 @@ public class Server {
     }
     
     /**
-     * Init server for listen request of client side.
+     * Init server for listen request from client side.
      *
-     * @return This object server.
-     * @throws IOException Exception of socket.
+     * @return {@link Server}.
+     * @throws IOException {@link IOException}.
      */
     public Server init() throws IOException{
         if(servidor == null){
@@ -147,14 +147,14 @@ public class Server {
     }
     
     /**
-     * Start server, if this is paused.
+     * Starts server, if is paused.
      */
     public void start(){
         runStatus = true;
     }
     
     /**
-     * Pause server, if this is running.
+     * Pauses server, if is running.
      */
     public void pause(){
         runStatus = false;
@@ -163,7 +163,7 @@ public class Server {
     /**
      * Stop server and release memory of socket.
      *
-     * @return This object server.
+     * @return {@link Server}.
      */
     public Server stop(){
         runStatus = false;
@@ -179,12 +179,12 @@ public class Server {
     }
     
     /**
-     * Refresh server with give port. 
+     * Refresh server with given port.
      *
-     * @param port Port number for server at.
-     * @return This object server.
-     * @throws Exception Exception for <em><i>Invalid port number.</i></em>
-     * @throws IOException IOException Exception of socket.
+     * @param port Number for run the server.
+     * @return {@link Server}.
+     * @throws Exception {@link Exception} for <em><i>Invalid port number.</i></em>
+     * @throws IOException {@link IOException}.
      */
     public Server refresh(int port) throws Exception, IOException{
         stop();
@@ -194,7 +194,7 @@ public class Server {
     }
     
     /**
-     * Get <i>IP</i> which server running at.
+     * Gets <i>IP</i> which the server running on.
      *
      * @return <i>IP</i> address of server.
      */

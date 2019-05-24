@@ -10,12 +10,14 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
+ * Server main screen.
  *
- * @author adm
+ * @author Anderson Costa
+ * @version 1.0
+ *
+ * @see <a href="https://github.com/AsonCS/server_java" target="_blank">Repository on GitHub</a>
  */
 public class MainScreen extends javax.swing.JFrame {
 
@@ -31,10 +33,21 @@ public class MainScreen extends javax.swing.JFrame {
         PAUSED
     }
     
+    /**
+     * Alters the current IP and port in main screen.
+     *
+     * @param ip The IP for replaced the current IP in main screen.
+     * @param port The port for replaced the current port in main screen.
+     */
     public void setAddress(String ip, int port){
         this.lbl_address.setText("  " + ip + ":" + port + "/  ");
     }
     
+    /**
+     * Alters the current status in main screen.
+     *
+     * @param status The status for replaced the current status in main screen.
+     */
     public void setTxt_status(Status status){
         switch (status){
             case STARTED:
@@ -46,6 +59,9 @@ public class MainScreen extends javax.swing.JFrame {
         }
     }
     
+    /**
+     *
+     */
     public void setDefault(){
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     }

@@ -3,6 +3,17 @@ package printerserver.server;
 import java.util.TreeMap;
 import printerserver.server.Parameter.*;
 
+/**
+ * Object with route attributes.
+ * 
+ * This object turn easy creation a handler for client request, 
+ * with parameters for that.
+ *
+ * @author Anderson Costa
+ * @version 1.0
+ *
+ * @see <a href="https://github.com/AsonCS/server_java" target="_blank">Repository on GitHub</a>
+ */
 public class Route implements Comparable<Route>{
     
     private String route;
@@ -11,6 +22,14 @@ public class Route implements Comparable<Route>{
     private Method method;
     private TreeMap<String, String> params;
 
+    /**
+     * Constructor with every parameters for treat client request.
+     *
+     * @param route Route string which identifies <i>url</i> requested.
+     * @param keys Keys at route to build key-value pairs.
+     * @param handler {@link Handler} for treat this request route.
+     * @param method {@link Method} <i>HTTP</i> of request route.
+     */
     public Route(String route, String[] keys, Handler handler, Method method) {
         this.keys = keys;
         this.route = route;
@@ -18,46 +37,101 @@ public class Route implements Comparable<Route>{
         this.method = method;
     }
 
+    /**
+     * Gets the current keys.
+     *
+     * @return Current keys.
+     */
     public String[] getKeys() {
         return keys;
     }
 
+    /**
+     * Alters the current keys.
+     *
+     * @param keys The keys for replaced the current keys.
+     * @return {@link Route}.
+     */
     public Route setKeys(String[] keys) {
         this.keys = keys;
         return this;
     }
 
+    /**
+     * Gets the current route.
+     *
+     * @return Current route.
+     */
     public String getRoute() {
         return route;
     }
 
+    /**
+     * Alters the current route.
+     *
+     * @param route The route for replaced the current route.
+     * @return {@link Route}.
+     */
     public Route setRoute(String route) {
         this.route = route;
         return this;
     }
 
+    /**
+     * Gets the current {@link Handler}.
+     *
+     * @return Current {@link Handler}.
+     */
     public Handler getHandler() {
         return handler;
     }
 
+    /**
+     * Alters the current {@link Handler}.
+     *
+     * @param handler The {@link Handler} for replaced the current {@link Handler}.
+     * @return {@link Route}.
+     */
     public Route setHandler(Handler handler) {
         this.handler = handler;
         return this;
     }
 
+    /**
+     * Gets the current {@link Method}.
+     *
+     * @return Current {@link Method}.
+     */
     public Method getMethod() {
         return method;
     }
 
+    /**
+     * Alters the current {@link Method}.
+     *
+     * @param method The {@link Method} for replaced the current {@link Method}.
+     * @return {@link Route}.
+     */
     public Route setMethod(Method method) {
         this.method = method;
         return this;
     }
     
+    /**
+     * Gets the current {@link TreeMap}.
+     *
+     * @return Current {@link TreeMap}.
+     */
     public TreeMap<String, String> getParams() {
         return params;
     }
 
+    /**
+     * Alters the current {@link TreeMap}.
+     *
+     * @param params The {@link TreeMap} for replaced the current {@link TreeMap}.
+     * @return {@link Route}.
+     */
     public Route setParams(TreeMap<String, String> params) {
         this.params = params;
         return this;

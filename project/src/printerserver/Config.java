@@ -1,19 +1,37 @@
 package printerserver;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import javafx.print.Collation;
 import printerserver.server.Server;
 
+/**
+ * Object to configure server.
+ * 
+ * This object turn easy configuration server.
+ *
+ * @author Anderson Costa
+ * @version 1.0
+ *
+ * @see <a href="https://github.com/AsonCS/server_java" target="_blank">Repository on GitHub</a>
+ */
 public class Config {    
     
+    /**
+     * Directory for config file.
+     */
     protected static final String PATHCONFIG = "src/config";
+
+    /**
+     * Complete path for config template.
+     */
     protected static final String TEMPL = PATHCONFIG + "/config.templ";
+
+    /**
+     * Complete path for config file.
+     */
     protected static final String CONFIG = PATHCONFIG + "/config.config";    
     
     private int port = Server.PORT;
@@ -21,6 +39,9 @@ public class Config {
     private List<String> printers = Arrays.asList();
     private String config = "", rep;
 
+    /**
+     * Empty constructor, with the pattern parameters.
+     */
     public Config() {
         new File(PATHCONFIG).mkdirs();
         config = readFile(CONFIG);
@@ -29,6 +50,9 @@ public class Config {
         indentifyPrinters();
     }
     
+    /**
+     * Close config file.
+     */
     public void close(){
         try{
             File file = new File(CONFIG);
@@ -86,30 +110,63 @@ public class Config {
         return "";
     }
 
+    /**
+     * Gets the current port.
+     *
+     * @return Current port.
+     */
     public int getPort() {
         return port;
     }
 
+    /**
+     * Alters the current port.
+     *
+     * @param port The port for replaced the current port.
+     * @return {@link Config}.
+     */
     public Config setPort(int port) {
         config = config.replace(String.valueOf(this.port), String.valueOf(port));
         this.port = port;
         return this;
     }
 
+    /**
+     * Gets the current ips.
+     *
+     * @return Current ips.
+     */
     public String getIps() {
         return ips;
     }
 
+    /**
+     * Alters the current ips.
+     *
+     * @param ips The ips for replaced the current ips.
+     * @return {@link Config}.
+     */
     public Config setIps(String ips) {
         config = config.replace(this.ips, ips);
         this.ips = ips;
         return this;
     }
 
+    /**
+     * Gets the current printers.
+     *
+     * @return Current printers.
+     */
     public List<String> getPrinters() {
         return printers;
     }
 
+    /**
+     * Alters the current printers.
+     *
+     * @param printers The printers for replaced the current printers.
+     * @return {@link Config}.
+     */
     public Config setPrinters(List<String> printers) {
         rep = "SCAPESNAMES\n[\n";
         printers.forEach(e -> rep += e + "\n");

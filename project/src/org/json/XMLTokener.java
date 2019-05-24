@@ -95,7 +95,7 @@ public class XMLTokener extends JSONTokener {
      *
      * @return  A string, or a '<' Character, or null if there is no more
      * source text.
-     * @throws JSONException
+     * @throws JSONException {@link JSONException}.
      */
     public Object nextContent() throws JSONException {
         char         c;
@@ -154,7 +154,7 @@ public class XMLTokener extends JSONTokener {
     /**
      * Unescapes an XML entity encoding;
      * @param e entity (only the actual entity value, not the preceding & or ending ;
-     * @return
+     * @return unescape entity.
      */
     static String unescapeEntity(String e) {
         // validate

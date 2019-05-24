@@ -2384,8 +2384,9 @@ public class JSONObject {
      * Warning: This method assumes that the data structure is acyclical.
      * </b>
      * 
+     * @param writer Writer.
      * @return The writer.
-     * @throws JSONException
+     * @throws JSONException {@link JSONException}.
      */
     public Writer write(Writer writer) throws JSONException {
         return this.write(writer, 0, 0);
@@ -2465,7 +2466,7 @@ public class JSONObject {
      * @param indent
      *            The indentation of the top level.
      * @return The writer.
-     * @throws JSONException
+     * @throws JSONException {@link JSONException}.
      */
     public Writer write(Writer writer, int indentFactor, int indent)
             throws JSONException {

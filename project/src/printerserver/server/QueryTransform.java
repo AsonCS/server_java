@@ -2,6 +2,16 @@ package printerserver.server;
 
 import java.util.TreeMap;
 
+/**
+ * Object to treat HTTP protocol codes.
+ * 
+ * This object encoding and decoding the data and url to connection.
+ *
+ * @author Anderson Costa
+ * @version 2019/01
+ *
+ * @see <a href="https://github.com/AsonCS/server_java" target="_blank">Repository on GitHub</a>
+ */
 public class QueryTransform {
     
     private static final String CODE_BACKSLASH = "%5C";   // Para barra invertida
@@ -19,6 +29,13 @@ public class QueryTransform {
     private static final String REG_BACKSLASH = "[\\\\]";
     private static final String REG_SLASH = "[/]";
     
+    /**
+     * This method encodes text,
+     * replacing <b>"</b> <i>blank space</i>, <code>/, \, (, ) and + </code><b>"</b>.
+     *
+     * @param codigo Text to be encoded.
+     * @return Text encoded.
+     */
     public static String encode(String codigo){
         codigo = codigo.replaceAll(REG_BACKSLASH, CODE_BACKSLASH);
         codigo = codigo.replaceAll(REG_SLASH, CODE_SLASH);
@@ -29,6 +46,13 @@ public class QueryTransform {
         return codigo;
     }
     
+    /**
+     * This method decodes text,
+     * replacing <b>"</b> <i>%5C, %2F, %20, %2B, %28 and %29</i> <b>"</b>.
+     *
+     * @param codigo Text to be decoded.
+     * @return Text decoded.
+     */
     public static String decode(String codigo){
         codigo = codigo.replaceAll(CODE_BACKSLASH, BACKSLASH);
         codigo = codigo.replaceAll(CODE_SLASH, SLASH);
@@ -39,6 +63,14 @@ public class QueryTransform {
         return codigo;
     }
     
+    /**
+     * This method extract parameters in url text or HTTP body,
+     * for "<i>key=value</i>" style.
+     *
+     * @param keyValue Text with "<i>key=value</i>" style to be process.
+     * @param params {@link TreeMap} to add parameters.
+     * @return {@link TreeMap} with key-value pairs.
+     */
     public static TreeMap<String, String> getKeyValue(String keyValue, TreeMap<String, String> params){
         if(params == null) params = new TreeMap<>();
         for(String b : keyValue.split("&")){

@@ -13,10 +13,27 @@ import printerserver.server.Printer;
 import printerserver.server.QueryTransform;
 import printerserver.server.Response;
 
+/**
+ * Object which create handlers for request routes.
+ *
+ * @author Anderson Costa
+ * @version 1.0
+ *
+ * @see <a href="https://github.com/AsonCS/server_java" target="_blank">Repository on GitHub</a>
+ */
 public class CreateRoutes {
     
+    /**
+     * Directory for config file.
+     */
     protected static final String PATHCONFIG = "src/config/";
     
+    /**
+     * Create and add routes for server.
+     *
+     * @return {@link Server}.
+     * @throws IOException {@link IOException}.
+     */
     public Server getServer() throws IOException{ 
         return new Server()
                 .addRoute("/config", Method.GET, configGet())

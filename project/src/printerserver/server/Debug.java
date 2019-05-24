@@ -4,13 +4,14 @@ import java.io.File;
 import java.io.FileWriter;
 
 /**
- * Object debug of server.
- * This class turn easy the use of messages, errors and logs.
+ * Object to debug of server.
+ * 
+ * This object turn easy the use of messages, errors and logs.
  *
  * @author Anderson Costa
- * @version 1.0
+ * @version 2019/01
  *
- * @see <a href="https://github.com/AsonCS" target="_blank">My repository on GitHub</a>
+ * @see <a href="https://github.com/AsonCS/server_java" target="_blank">Repository on GitHub</a>
  */
 public class Debug {
     
@@ -40,72 +41,72 @@ public class Debug {
     public static boolean info = false;
     
     /**
-     * Method for print error, if debug atived.
+     * Method for show error, if debug is activated.
      * 
-     * @param message Text for print.
+     * @param message Text for show.
      */
     public static void error(String message){
         if(debug) System.err.println(message);
     }
     
     /**
-     * Method for print error, if debug atived.
+     * Method for show error, if debug is activated.
      * 
-     * @param object Object with toString of this.
+     * @param object Object with toString of that.
      */
     public static void error(Object object){
         if(debug) System.err.println(object);
     }
     
     /**
-     * Method for print error, if debug atived.
+     * Method for show error, if debug is activated.
      * 
-     * @param e Object exception with error.
+     * @param e {@link Exception}.
      */
     public static void error(Exception e){
         if(debug) e.printStackTrace();
     }
     
     /**
-     * Method for print message, if debug atived.
+     * Method for show message, if debug is activated.
      * 
-     * @param object Object with toString of this.
+     * @param object Object with toString of that.
      */
     public static void message(Object object){
         if(debug) System.out.println(object);
     }
     
     /**
-     * Method for print message, if debug atived.
+     * Method for show message, if debug is activated.
      * 
-     * @param message Text for print.
+     * @param message Text for show.
      */
     public static void message(String message){
         if(debug) System.out.println(message);
     }
     
     /**
-     * Method for print info, if info atived.
+     * Method for show info, if info is activated.
      * 
-     * @param message Text for print.
+     * @param message Text for show.
      */
     public static void info(String message){
         if(info) System.out.println(message);
     }
     
     /**
-     * Method for print info, if info atived.
+     * Method for show info, if info is activated.
      * 
-     * @param object Object with toString of this.
+     * @param object Object with toString of that.
      */
     public static void info(Object object){
         if(info) System.out.println(object);
     }
     
     /**
-     * Method for record log in file with , if log atived.
+     * Method for write log at file, if log is activated.
      * 
-     * @param message Text for print.
+     * @param message Text for show.
      */
     public static void logFile(String message){
         if(log){

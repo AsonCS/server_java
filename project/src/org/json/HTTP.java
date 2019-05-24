@@ -66,7 +66,7 @@ public class HTTP {
      * @param string An HTTP header string.
      * @return A JSONObject containing the elements and attributes
      * of the XML string.
-     * @throws JSONException
+     * @throws JSONException {@link JSONException}.
      */
     public static JSONObject toJSONObject(String string) throws JSONException {
         JSONObject     jo = new JSONObject();

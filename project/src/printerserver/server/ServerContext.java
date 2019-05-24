@@ -1,13 +1,21 @@
 package printerserver.server;
 
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.TreeMap;
 import printerserver.server.Parameter.*;
 
+/**
+ * Object to find route and execute the method which will treat the request from client side.
+ * 
+ * This object find the route which user sent for server and perform the treatment method of this route.
+ *
+ * @author Anderson Costa
+ * @version 2019/01
+ *
+ * @see <a href="https://github.com/AsonCS/server_java" target="_blank">Repository on GitHub</a>
+ */
 public class ServerContext implements Runnable{
     
     private Handler handler;
@@ -21,6 +29,12 @@ public class ServerContext implements Runnable{
     
     private final Socket cliente;
 
+    /**
+     * Constructor with client connection and the list of routes.
+     *
+     * @param cliente Client connection with the stream of that.
+     * @param routes List of routes for find out which match that client route.
+     */
     public ServerContext(Socket cliente, ArrayList<Route> routes){
         this.cliente = cliente;
         this.routes = routes;

@@ -1,15 +1,22 @@
 package printerserver.server;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileReader;
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Scanner;
 import javax.imageio.ImageIO;
 import printerserver.server.Parameter.*;
 
+/**
+ * Object to treat client connection response.
+ * 
+ * This object manage client connection response at method which treat url route.
+ *
+ * @author Anderson Costa
+ * @version 2019/01
+ *
+ * @see <a href="https://github.com/AsonCS/server_java" target="_blank">Repository on GitHub</a>
+ */
 public class Response {
     
     private String body;
@@ -18,6 +25,9 @@ public class Response {
     private Status status;
     private byte[] bytes;
 
+    /**
+     * Empty constructor for simple response. 
+     */
     public Response() {
         body = "";
         bytes = new byte[0];
@@ -26,47 +36,103 @@ public class Response {
         status = Status.OK;
     }
 
+    /**
+     * Gets the current body.
+     *
+     * @return Current body.
+     */
     public String getBody() {
         return body;
     }
 
+    /**
+     * Alters the current body.
+     *
+     * @param body The body for replaced the current body.
+     * @return {@link Response}.
+     */
     public Response setBody(String body) {
         this.body = body;
         return this;
     }
 
+    /**
+     * Add the current body.
+     *
+     * @param body The body for replaced the current body.
+     * @return {@link Response}.
+     */
     public Response putBody(String body) {
         this.body += body;
         return this;
     }
 
+    /**
+     * Gets the current {@link ContentType}.
+     *
+     * @return {@link ContentType}.
+     */
     public ContentType getContentType() {
         return contentType;
     }
 
+    /**
+     * Alters the current {@link ContentType}.
+     *
+     * @param contentType The {@link ContentType} for replaced the current {@link ContentType}.
+     * @return {@link Response}.
+     */
     public Response setContentType(ContentType contentType) {
         this.contentType = contentType;
         return this;
     }
 
+    /**
+     * Gets the current {@link Encoding}.
+     *
+     * @return {@link Encoding}.
+     */
     public Encoding getEncoding() {
         return encoding;
     }
 
+    /**
+     * Alters the current {@link Encoding}.
+     *
+     * @param encoding The {@link Encoding} for replaced the current {@link Encoding}.
+     * @return {@link Response}.
+     */
     public Response setEncoding(Encoding encoding) {
         this.encoding = encoding;
         return this;
     }
 
+    /**
+     * Gets the current {@link Status}.
+     *
+     * @return {@link Status}.
+     */
     public Status getStatus() {
         return status;
     }
 
+    /**
+     * Alters the current {@link Status}.
+     *
+     * @param status The {@link Status} for replaced the current {@link Status}.
+     * @return {@link Response}.
+     */
     public Response setStatus(Status status) {
         this.status = status;
         return this;
     }
     
+    /**
+     * This method seek and read file, that can be text or binary file.
+     *
+     * @param file File complete path.
+     * @return {@link Response}.
+     */
     public Response readFile(String file){
         String[] a = file.split("\\.");
         if(a.length > 0) setContentType(Parameter.indentifyContentType(a[a.length - 1]));
@@ -79,6 +145,14 @@ public class Response {
         return this;
     }
     
+    /**
+     * This method use {@link Response#readFile(java.lang.String)} and replaces
+     * the "<code>{{ variables }}</code>" structures for given variables.  
+     *
+     * @param file File complete path.
+     * @param variables Variables to be placed in file content.
+     * @return {@link Response}.
+     */
     public Response readTemplate(String file, String[][] variables){
         readFile(file);
         if(getBody().length() == 0) return this;
@@ -118,6 +192,12 @@ public class Response {
         }
     }
     
+    /**
+     * Gets the current content in <i>byte</i> form.
+     *
+     * @return Content at <i>byte</i> form.
+     * @throws Exception {@link Exception}.
+     */
     protected byte[] getBytes() throws Exception{
         String encod = (Parameter.isImage(contentType)) ? "" : ";charset=" + Parameter.getEncoding(encoding);
         int length = (Parameter.isImage(contentType)) ? bytes.length : body.length();

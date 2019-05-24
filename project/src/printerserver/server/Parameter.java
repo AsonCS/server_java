@@ -1,14 +1,15 @@
 package printerserver.server;
 
 /**
- * Object for centralize parameters of server.
- * This class turn easy the use of <b><i>Content type</i></b>, <b><i>Method</i></b>,
+ * Object to centralize parameters of server.
+ * 
+ * This object turn easy the use of <b><i>Content type</i></b>, <b><i>Method</i></b>,
  * <b><i>Encoding</i></b> and <b><i>Status</i></b>.
  *
  * @author Anderson Costa
- * @version 1.0
+ * @version 2019/01
  *
- * @see <a href="https://github.com/AsonCS" target="_blank">My repository on GitHub</a>
+ * @see <a href="https://github.com/AsonCS/server_java" target="_blank">Repository on GitHub</a>
  */
 public class Parameter {
     
@@ -23,7 +24,7 @@ public class Parameter {
     public static final String POST = "POST";
     
     /**
-     * Object Enum with <b><u>Methods</u></b> types.
+     * Object Enum with HTTP <b><u>Methods</u></b> types.
      */
     public enum Method{
 
@@ -39,13 +40,13 @@ public class Parameter {
     }
     
     /**
-     * Object Enum with <b><u>Content Types</u></b>.
+     * Object Enum with HTTP <b><u>Content Types</u></b>.
      */
     public enum ContentType{
 
         /**
          * Content Type: <b>text/html</b>.<br>
-         * Indentify also: <u>html</u>.
+         * Identifies also: <u>html</u>.
          */
         TEXT_HTML,
 
@@ -61,43 +62,43 @@ public class Parameter {
 
         /**
          * Content Type: <b>application/json</b>.<br>
-         * Indentify also: <u>json</u>.
+         * Identifies also: <u>json</u>.
          */
         APPLICATION_JSON,
 
         /**
          * Content Type: <b>text/css</b>.<br>
-         * Indentify also: <u>css</u>.
+         * Identifies also: <u>css</u>.
          */
         TEXT_CSS,
 
         /**
          * Content Type: <b>application/javascript</b>.<br>
-         * Indentify also: <u>text/javascript, javascript, js</u>.
+         * Identifies also: <u>text/javascript, javascript, js</u>.
          */
         TEXT_JAVASCRIPT,
 
         /**
          * Content Type: <b>image/ico</b>.<br>
-         * Indentify also: <u>ico</u>.
+         * Identifies also: <u>ico</u>.
          */
         IMAGE_ICO,
 
         /**
          * Content Type: <b>image/png</b>.<br>
-         * Indentify also: <u>png</u>.
+         * Identifies also: <u>png</u>.
          */
         IMAGE_PNG,
 
         /**
          * Content Type: <b>image/svg+xml</b>.<br>
-         * Indentify also: <u>svg</u>.
+         * Identifies also: <u>svg</u>.
          */
         IMAGE_SVG
     }
         
     /**
-     * Object Enum with <b><u>Encoding</u></b> types.
+     * Object Enum with HTTP <b><u>Encoding</u></b> types.
      */
     public enum Encoding{
 
@@ -108,7 +109,7 @@ public class Parameter {
     }
         
     /**
-     * Object Enum with <b><u>Status</u></b> types.
+     * Object Enum with HTTP <b><u>Status</u></b> types.
      */
     public enum Status {
 
@@ -124,10 +125,10 @@ public class Parameter {
     }
     
     /**
-     * Identify <b>Method</b> type for give parameter String.
+     * Identifies <b>Method</b> type for given parameter String.
      * 
      * @param string String with method.
-     * @return Object enum with <b>Method</b> type.
+     * @return {@link Method}.
      */
     public static Method getMethod(String string){
         Method method;
@@ -143,7 +144,7 @@ public class Parameter {
     }
         
     /**
-     * Identify text content-type for give parameter <b>Content Type</b>.
+     * Identifies text content-type for given parameter <b>Content Type</b>.
      * 
      * @param contentType Enum <b>Content Type</b> of content-type.
      * @return Text representation of content-type.
@@ -183,10 +184,10 @@ public class Parameter {
     }
     
     /**
-     * Identify <b>Content Type</b> for give parameter String.
+     * Identifies <b>Content Type</b> for given parameter String.
      * 
      * @param contentType String with content-type.
-     * @return Object enum with <b>Content Type</b>.
+     * @return {@link ContentType}.
      */
     public static ContentType indentifyContentType(String contentType){
         ContentType type;
@@ -233,7 +234,7 @@ public class Parameter {
     }
             
     /**
-     * Identify text encoding for give parameter <b>Encoding</b>.
+     * Identifies text encoding for given parameter <b>Encoding</b>.
      * 
      * @param encoding Enum <b>Encoding</b> of encoding.
      * @return Text representation of encoding.
@@ -249,7 +250,7 @@ public class Parameter {
     }
             
     /**
-     * Identify text status for give parameter <b>Status</b>.
+     * Identifies text status for given parameter <b>Status</b>.
      * 
      * @param status Enum <b>Status</b> of status.
      * @return Text representation of status.
@@ -268,7 +269,7 @@ public class Parameter {
     }
                 
     /**
-     * Identify if this type is binary, for diferent write in Stream.
+     * Identifies if this type is binary, for diferent write in Stream.
      * 
      * @param type Enum <b>Content Type</b> of content-type.
      * @return If this type is binary returns <b>True</b> or <b>False</b> otherwise.

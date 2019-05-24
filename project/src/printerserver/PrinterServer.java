@@ -10,6 +10,14 @@ import javax.swing.ImageIcon;
 import printerserver.MainScreen.Status;
 import printerserver.server.Debug;
 
+/**
+ * Server main object with initial configurations.
+ *
+ * @author Anderson Costa
+ * @version 1.0
+ *
+ * @see <a href="https://github.com/AsonCS/server_java" target="_blank">Repository on GitHub</a>
+ */
 public class PrinterServer {
     
     private static Server server;
@@ -18,6 +26,11 @@ public class PrinterServer {
     private static SystemTray systemTray;
     private static TrayIcon trayIcon;
     
+    /**
+     * Main method which launch application.
+     *
+     * @param args Command line arguments.
+     */
     public static void main(String[] args){
         //Debug.debug = true;
         //Debug.log = true;
@@ -42,6 +55,9 @@ public class PrinterServer {
         panel.setTxt_status(Status.STARTED);
     }
     
+    /**
+     * Show server panel.
+     */
     public static void show(){
         if(panel == null){
             panel = new MainScreen();
@@ -51,20 +67,32 @@ public class PrinterServer {
         panel.setVisible(true);
     }
     
+    /**
+     * Starts server.
+     */
     public static void start(){
         PrinterServer.server.start();
     }
     
+    /**
+     * Stops server.
+     */
     public static void stop(){
         PrinterServer.server.pause();
     }
     
+    /**
+     * Turns off server.
+     */
     public static void quit(){
         server.stop();
         if(systemTray != null) systemTray.remove(trayIcon);
         panel.dispose();
     }
     
+    /**
+     * Reloads server.
+     */
     public static void refresh(){
         show();
         start();
