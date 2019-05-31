@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import printerserver.server.Server;
 import javax.swing.ImageIcon;
-import printerserver.MainScreen.Status;
+import printerserver.PrinterScreen.Status;
 import printerserver.server.Debug;
 
 /**
@@ -22,7 +22,9 @@ public class PrinterServer {
     
     private static Server server;
     private static Thread shutdown;
-    private static MainScreen panel;
+    private static MainScreen main;
+    private static PrinterScreen panel;
+    private static BalanceScreen balance;
     private static SystemTray systemTray;
     private static TrayIcon trayIcon;
     
@@ -51,7 +53,7 @@ public class PrinterServer {
         addIcon();
         addShutdown();
         show();
-        start();
+        //start();
         panel.setTxt_status(Status.STARTED);
     }
     
@@ -59,12 +61,18 @@ public class PrinterServer {
      * Show server panel.
      */
     public static void show(){
+        if(main == null){
+            main = new MainScreen();
+        }
+        main.setVisible(true);
+        
+        /*
         if(panel == null){
-            panel = new MainScreen();
+            panel = new PrinterScreen();
         }
         if(!SystemTray.isSupported()) panel.setDefault();
         panel.setAddress(Server.getIp(), Server.PORT);
-        panel.setVisible(true);
+        panel.setVisible(true);// */
     }
     
     /**

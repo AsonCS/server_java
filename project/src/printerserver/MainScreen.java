@@ -10,60 +10,19 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import javax.swing.JOptionPane;
 
 /**
- * Server main screen.
  *
- * @author Anderson Costa
- * @version 1.0
- *
- * @see <a href="https://github.com/AsonCS/server_java" target="_blank">Repository on GitHub</a>
+ * @author adm
  */
 public class MainScreen extends javax.swing.JFrame {
 
     /**
-     * Creates new form NewJFrame
+     * Creates new form MainScreen
      */
     public MainScreen() {
         initComponents();
-    }
-    
-    enum Status{
-        STARTED,
-        PAUSED
-    }
-    
-    /**
-     * Alters the current IP and port in main screen.
-     *
-     * @param ip The IP for replaced the current IP in main screen.
-     * @param port The port for replaced the current port in main screen.
-     */
-    public void setAddress(String ip, int port){
-        this.lbl_address.setText("  " + ip + ":" + port + "/  ");
-    }
-    
-    /**
-     * Alters the current status in main screen.
-     *
-     * @param status The status for replaced the current status in main screen.
-     */
-    public void setTxt_status(Status status){
-        switch (status){
-            case STARTED:
-                this.lbl_status.setText("  Runing  ");
-                break;
-            case PAUSED:
-            default:
-                this.lbl_status.setText("  Paused  ");
-        }
-    }
-    
-    /**
-     *
-     */
-    public void setDefault(){
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     }
 
     /**
@@ -75,155 +34,116 @@ public class MainScreen extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel2 = new javax.swing.JLabel();
-        txt_ip1 = new javax.swing.JTextField();
-        lbl_title1 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        lbl_title = new javax.swing.JLabel();
-        btn_start = new javax.swing.JButton();
-        btn_stop = new javax.swing.JButton();
-        btn_quit = new javax.swing.JButton();
-        btn_refresh = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        btn_copy = new javax.swing.JButton();
-        lbl_status = new javax.swing.JLabel();
-        lbl_address = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        btnBalanceScreen = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        btnPrintScreen = new javax.swing.JButton();
+        lblHostPrint = new javax.swing.JLabel();
+        lblText1Balance = new javax.swing.JLabel();
+        lblStatusPrint = new javax.swing.JLabel();
+        lblText2Balance = new javax.swing.JLabel();
 
-        jLabel2.setText("IP address: ");
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        txt_ip1.setEditable(false);
-        txt_ip1.setSelectionColor(new java.awt.Color(255, 255, 255));
+        btnBalanceScreen.setFont(new java.awt.Font("Cambria", 1, 24)); // NOI18N
+        btnBalanceScreen.setText("Balance");
 
-        lbl_title1.setText("Print Server TWX");
+        jLabel1.setFont(new java.awt.Font("Cambria", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 153, 0));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("  Server TWX  ");
 
-        jCheckBox1.setText("jCheckBox1");
+        btnPrintScreen.setFont(new java.awt.Font("Cambria", 1, 24)); // NOI18N
+        btnPrintScreen.setText("Print");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        lbl_title.setText("Print Server TWX");
-
-        btn_start.setText("Start");
-        btn_start.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_startActionPerformed(evt);
+        lblHostPrint.setFont(new java.awt.Font("Cambria", 1, 14)); // NOI18N
+        lblHostPrint.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblHostPrint.setText("...");
+        lblHostPrint.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblHostPrintMouseClicked(evt);
             }
         });
 
-        btn_stop.setText("Stop");
-        btn_stop.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_stopActionPerformed(evt);
-            }
-        });
+        lblText1Balance.setFont(new java.awt.Font("Cambria", 1, 14)); // NOI18N
+        lblText1Balance.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblText1Balance.setText("...");
 
-        btn_quit.setText("Quit");
-        btn_quit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_quitActionPerformed(evt);
-            }
-        });
+        lblStatusPrint.setFont(new java.awt.Font("Cambria", 1, 14)); // NOI18N
+        lblStatusPrint.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblStatusPrint.setText("...");
 
-        btn_refresh.setText("Refresh");
-        btn_refresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_refreshActionPerformed(evt);
-            }
-        });
+        lblText2Balance.setFont(new java.awt.Font("Cambria", 1, 14)); // NOI18N
+        lblText2Balance.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblText2Balance.setText("...");
 
-        jLabel3.setText("Address: ");
-
-        jLabel4.setText("Status:");
-
-        btn_copy.setText("Copy");
-        btn_copy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_copyActionPerformed(evt);
-            }
-        });
-
-        lbl_status.setText("Paused");
-
-        lbl_address.setText("   ");
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnBalanceScreen, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblText1Balance, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblText2Balance, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnPrintScreen, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblHostPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblStatusPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnPrintScreen, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblHostPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblStatusPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnBalanceScreen, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblText1Balance, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblText2Balance, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btn_quit)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_refresh)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_stop)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn_start))
-                    .addComponent(lbl_title, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbl_address)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_copy))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbl_status)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lbl_title)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(btn_copy)
-                    .addComponent(lbl_address))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(lbl_status))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_start)
-                    .addComponent(btn_stop)
-                    .addComponent(btn_quit)
-                    .addComponent(btn_refresh))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_stopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_stopActionPerformed
-        setTxt_status(Status.PAUSED);
-        PrinterServer.stop();        
-    }//GEN-LAST:event_btn_stopActionPerformed
-
-    private void btn_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_startActionPerformed
-        setTxt_status(Status.STARTED);
-        PrinterServer.start();
-    }//GEN-LAST:event_btn_startActionPerformed
-
-    private void btn_quitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_quitActionPerformed
-        setTxt_status(Status.STARTED);
-        PrinterServer.quit();
-    }//GEN-LAST:event_btn_quitActionPerformed
-
-    private void btn_refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_refreshActionPerformed
-        PrinterServer.refresh();
-    }//GEN-LAST:event_btn_refreshActionPerformed
-
-    private void btn_copyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_copyActionPerformed
-        Clipboard board = Toolkit.getDefaultToolkit().getSystemClipboard();
-        ClipboardOwner selecao = new StringSelection(lbl_address.getText().trim());
-        board.setContents((Transferable) selecao, selecao);
-    }//GEN-LAST:event_btn_copyActionPerformed
+    private void lblHostPrintMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHostPrintMouseClicked
+        if(evt.getClickCount() == 2 && !evt.isConsumed()){
+            Clipboard board = Toolkit.getDefaultToolkit().getSystemClipboard();
+            ClipboardOwner selecao = new StringSelection(lblHostPrint.getText().trim());
+            board.setContents((Transferable) selecao, selecao);
+            JOptionPane.showMessageDialog(rootPane, "Text copied!");
+        }
+    }//GEN-LAST:event_lblHostPrintMouseClicked
 
     /**
      * @param args the command line arguments
@@ -251,7 +171,6 @@ public class MainScreen extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MainScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -262,19 +181,13 @@ public class MainScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_copy;
-    private javax.swing.JButton btn_quit;
-    private javax.swing.JButton btn_refresh;
-    private javax.swing.JButton btn_start;
-    private javax.swing.JButton btn_stop;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel lbl_address;
-    private javax.swing.JLabel lbl_status;
-    private javax.swing.JLabel lbl_title;
-    private javax.swing.JLabel lbl_title1;
-    private javax.swing.JTextField txt_ip1;
+    private javax.swing.JButton btnBalanceScreen;
+    private javax.swing.JButton btnPrintScreen;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblHostPrint;
+    private javax.swing.JLabel lblStatusPrint;
+    private javax.swing.JLabel lblText1Balance;
+    private javax.swing.JLabel lblText2Balance;
     // End of variables declaration//GEN-END:variables
 }
