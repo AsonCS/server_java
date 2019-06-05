@@ -4,10 +4,16 @@ import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import printerserver.server.Server;
 import javax.swing.ImageIcon;
-import printerserver.PrinterScreen.Status;
 import printerserver.server.Debug;
 
 /**
@@ -22,9 +28,6 @@ public class PrinterServer {
     
     private static Server server;
     private static Thread shutdown;
-    private static MainScreen main;
-    private static PrinterScreen panel;
-    private static BalanceScreen balance;
     private static SystemTray systemTray;
     private static TrayIcon trayIcon;
     
@@ -42,37 +45,44 @@ public class PrinterServer {
             if(a.toLowerCase().equals("log")) Debug.log = true;
             if(a.toLowerCase().equals("info")) Debug.info = true;
         }
+        show();
+        addIcon();
+        addShutdown();
         if(server == null){
             try {
                 server = new CreateRoutes().getServer().init();
             } catch (IOException ex) {
-                Debug.logFile(ex.getMessage());
-                System.exit(0);
+                String error = String.format(
+                        "Error occurred in initialize modules\n%s / Error type %s\nError message - %s", 
+                        new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()),
+                        "IOException",
+                        ex.getMessage()
+                );
+                System.err.println(error);
+                Debug.logFile(error);
+                System.exit(1);
             }
         }
-        addIcon();
-        addShutdown();
-        show();
         //start();
-        panel.setTxt_status(Status.STARTED);
     }
     
     /**
      * Show server panel.
      */
     public static void show(){
-        if(main == null){
-            main = new MainScreen();
+        try {
+            WebScreen.init(new File("templates/main_screen.html"), new JSObj());
+        } catch (MalformedURLException ex) {
+            String error = String.format(
+                    "Error occurred in initialize modules\n%s / Error type %s\nError message - %s", 
+                    new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()),
+                    "MalformedURLException",
+                    ex.getMessage()
+            );
+            System.err.println(error);
+            Debug.logFile(error);
+            System.exit(1);
         }
-        main.setVisible(true);
-        
-        /*
-        if(panel == null){
-            panel = new PrinterScreen();
-        }
-        if(!SystemTray.isSupported()) panel.setDefault();
-        panel.setAddress(Server.getIp(), Server.PORT);
-        panel.setVisible(true);// */
     }
     
     /**
@@ -80,6 +90,8 @@ public class PrinterServer {
      */
     public static void start(){
         PrinterServer.server.start();
+        WebScreen.putJs("setAddress('http://" + Server.getIp() + ":" + Server.PORT + "/');");
+        WebScreen.putJs("setStatus('Running');");
     }
     
     /**
@@ -87,24 +99,18 @@ public class PrinterServer {
      */
     public static void stop(){
         PrinterServer.server.pause();
+        WebScreen.putJs("setAddress('http://" + Server.getIp() + ":" + Server.PORT + "/');");
+        WebScreen.putJs("setStatus('Paused');");
     }
     
     /**
      * Turns off server.
      */
     public static void quit(){
+        WebScreen.close();
         server.stop();
         if(systemTray != null) systemTray.remove(trayIcon);
-        panel.dispose();
-    }
-    
-    /**
-     * Reloads server.
-     */
-    public static void refresh(){
-        show();
-        start();
-        panel.setTxt_status(Status.STARTED);
+        System.exit(0);
     }
     
     private static boolean addIcon(){
@@ -116,7 +122,11 @@ public class PrinterServer {
             MouseAdapter mouseAdapter = new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    show();
+                    if(WebScreen.isVisible()){
+                        WebScreen.close();
+                    }else{
+                        WebScreen.show();
+                    }
                 }
             };
             trayIcon.addMouseListener(mouseAdapter);
@@ -145,6 +155,20 @@ public class PrinterServer {
 
             };
             Runtime.getRuntime().addShutdownHook(shutdown);
+        }
+    }
+    
+    public static class JSObj{
+        public void quit(){
+            PrinterServer.quit();
+        }
+
+        public void stop(){
+            PrinterServer.stop();
+        }
+
+        public void start(){
+            PrinterServer.start();
         }
     }
 }

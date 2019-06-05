@@ -1,0 +1,40 @@
+<!DOCTYPE htm>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="shortcut icon" href="img/favicon.png">
+        <link href="../statics/bootstrap.min.css" rel="stylesheet" />
+        <script type="text/javascript" src="../statics/jquery.min.js" ></script>
+        <script type="text/javascript" src="../statics/popper.min.js" ></script>
+        <script type="text/javascript" src="../statics/bootstrap.min.js" ></script>
+        <script>
+            function setAddress(address){
+                document.getElementById('span_address').innerHTML = address;
+            }
+            
+            function setStatus(status){
+                document.getElementById('span_status').innerHTML = status;
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <h1 style="color: green; text-decoration: underline; font-style: italic; font-weight: 900">Server TWX</h1>
+            <br>
+            <div>
+                <h2 style="color: green; text-decoration: underline; font-style: italic; font-weight: 900">Printer Server</h2>
+                <h3>Address: <span id="span_address">...</span></h3>
+                <h3>Status: <span id="span_status">Paused</span></h3>
+                <button type="button" class="btn btn-primary" onclick="JSObj.quit()">Quit</button>
+                <button type="button" class="btn btn-primary" onclick="JSObj.start()">Refresh</button>
+                <button type="button" class="btn btn-primary" onclick="JSObj.stop()">Stop</button>
+                <button type="button" class="btn btn-primary" onclick="JSObj.start()">Start</button>
+            </div>
+            <br>
+            <div>
+                <h2 style="color: green; text-decoration: underline; font-style: italic; font-weight: 900">Balance Server</h2>
+                
+            </div>
+        </div>
+    </body>
+</html>

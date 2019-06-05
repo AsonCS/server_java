@@ -167,14 +167,12 @@ public class Server {
      */
     public Server stop(){
         runStatus = false;
-        if(servidor != null){
-            while(!servidor.isClosed()){
-                try {
-                    servidor.close();
-                } catch (IOException ex) {}
-            }
+        while(servidor != null){
+            try {
+                servidor.close();
+                servidor = null;
+            } catch (IOException ex) {}
         }
-        servidor = null;
         return this;
     }
     
